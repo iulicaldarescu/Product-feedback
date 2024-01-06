@@ -1,0 +1,10 @@
+.mobile-size-backgroud {
+  background-image: url("../assets/suggestions/mobile/background-header.png");
+}
+
+.custom-filter-childs > * {
+  padding: 0.2rem 1rem;
+  background-color: blue;
+  color: white;
+  border-radius: 0.5rem;
+}
