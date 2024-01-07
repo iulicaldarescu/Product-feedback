@@ -19,6 +19,7 @@ function Header() {
         return true;
       case "CLOSE_MODAL":
         return false;
+
       default:
         return state;
     }
@@ -32,6 +33,7 @@ function Header() {
   };
 
   const closeModal = () => {
+    // Trigger the slide-out animation by adding a class
     dispatch({ type: "CLOSE_MODAL" });
   };
 
@@ -55,12 +57,15 @@ function Header() {
 
       {isModalMenuOpen && (
         <div
-          className=" absolute bg-violet-300 top-0 right-0 left-40 h-screen"
-          onClick={closeModal}
+          className={`absolute bg-violet-300 top-0 right-0 left-40 h-screen ${
+            isModalMenuOpen
+              ? styles["animate-slide-in"]
+              : styles["animate-slide-out"]
+          }`}
         >
           {/* //close button */}
-          <button>
-            <img src={closeMenu} className="pl-5 py-3"></img>
+          <button onClick={closeModal}>
+            <img src={closeMenu} className={`pl-5 py-3 `}></img>
           </button>
 
           {/* container that holds the 2 blocks of menu like in the photo */}
