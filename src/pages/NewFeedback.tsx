@@ -1,5 +1,5 @@
 import styles from "../styles/NewFeedback.module.css";
-import AddFeedback from "../Components/AddFeedback";
+import AddFeedback from "../Components/AddingButton";
 import { useNavigate } from "react-router-dom";
 
 function NewFeedback() {
