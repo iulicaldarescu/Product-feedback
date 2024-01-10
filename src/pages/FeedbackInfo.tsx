@@ -1,9 +1,18 @@
-import { useLocation, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
 import commentsIcon from "../assets/shared/icon-comments.svg";
 import MainComment from "../Components/Comments/MainComment";
 import Comment from "../Types/CommentTypes";
+import UsersComment from "../Types/CommentTypes";
+import { UsersReply } from "../Types/ReplyTypes";
+
+type Reply = {
+  id: number;
+  content: string;
+  user: UsersComment;
+  replies: UsersReply[];
+};
 
 function FeedbackInfo() {
   const location = useLocation();
@@ -15,17 +24,17 @@ function FeedbackInfo() {
     setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
   };
 
-  const comments = feedbackData.comments ?? [];
+  //comments
+  const comments = feedbackData.comments ?? []; //verifica null sau undefined
 
-  const replies = comments.map((item) => {
+  const replies = comments.map((item: Reply) => {
     return item.replies?.length ?? 0;
   });
 
-  const totalReplies = replies.reduce((acc, curr) => {
+  //replies
+  const totalReplies = replies.reduce((acc: number, curr: number) => {
     return acc + curr;
   }, 0);
-
-  console.log(totalReplies);
 
   return (
     <div className="p-4 mx-2 flex flex-col gap-6">
@@ -51,9 +60,8 @@ function FeedbackInfo() {
           {/* right side */}
           <div className="flex items-center gap-2">
             <img className="w-6" src={commentsIcon}></img>
-            {totalReplies + comments.length !== 0 && (
-              <p className="font-bold">{totalReplies + comments.length}</p>
-            )}
+
+            <p className="font-bold">{totalReplies + comments.length}</p>
           </div>
         </div>
       </div>
@@ -64,7 +72,8 @@ function FeedbackInfo() {
           <span>{comments.length}</span> Comments
         </p>
         {/* comment component mapping */}
-        {feedbackData?.comments?.map((comment: Comment) => {
+
+        {feedbackData.comments?.map((comment: Comment) => {
           return <MainComment comment={comment} />;
         })}
       </div>

@@ -3,10 +3,19 @@ import arrowUp from "../../assets/shared/icon-arrow-up.svg";
 import commentsIcon from "../../assets/shared/icon-comments.svg";
 import { FeedbackProps } from "../Feedback/Feedbacks";
 import { Link } from "react-router-dom";
+import { UsersReply } from "../../Types/ReplyTypes";
+import UsersComment from "../../Types/CommentTypes";
 
 // custom TYPESCRIPT !!!!!!!!
 export type Props = {
   item: FeedbackProps;
+};
+
+type Reply = {
+  id: number;
+  content: string;
+  user: UsersComment;
+  replies: UsersReply[];
 };
 
 function Feedback({ item }: Props) {
@@ -14,7 +23,15 @@ function Feedback({ item }: Props) {
 
   let commentLength = item.comments ?? [];
 
-  console.log(item.id);
+  const replies = commentLength.map((item: Reply) => {
+    return item.replies?.length ?? 0;
+  });
+
+  const numberOfReplies = replies.reduce((acc: number, curr: number) => {
+    return acc + curr;
+  }, 0);
+
+  console.log(numberOfReplies);
 
   return (
     <Link to={`/feedback/${item.id}`} state={item}>
@@ -41,7 +58,9 @@ function Feedback({ item }: Props) {
           {/* right side */}
           <div className="flex items-center gap-2">
             <img className="w-6" src={commentsIcon}></img>
-            <p className="font-bold">{commentLength.length}</p>
+            <p className="font-bold">
+              {commentLength.length + numberOfReplies}
+            </p>
           </div>
         </div>
       </div>
