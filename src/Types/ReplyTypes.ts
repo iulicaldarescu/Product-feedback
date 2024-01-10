@@ -1,5 +1,3 @@
-import { UsersComment } from "./CommentTypes";
-
 export type UsersReply = {
   image: string;
   name: string;
