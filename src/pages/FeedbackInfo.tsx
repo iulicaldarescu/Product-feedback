@@ -1,9 +1,18 @@
-import { useLocation, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
 import commentsIcon from "../assets/shared/icon-comments.svg";
 import MainComment from "../Components/Comments/MainComment";
 import Comment from "../Types/CommentTypes";
+import UsersComment from "../Types/CommentTypes";
+import { UsersReply } from "../Types/ReplyTypes";
+
+type Reply = {
+  id: number;
+  content: string;
+  user: UsersComment;
+  replies: UsersReply[];
+};
 
 function FeedbackInfo() {
   const location = useLocation();
@@ -15,32 +24,17 @@ function FeedbackInfo() {
     setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
   };
 
-  let repliedFound;
+  //comments
+  const comments = feedbackData.comments ?? []; //verifica null sau undefined
 
-  console.log(feedbackData);
+  const replies = comments.map((item: Reply) => {
+    return item.replies?.length ?? 0;
+  });
 
-  if ("comments" in feedbackData) {
-    console.log(false);
-    // const repliedComment: number = feedbackData.comments.map((c) => {
-    //   if ("replies" in c) {
-    //     repliedFound = c.replies.length;
-    //   } else {
-    //     repliedFound = [];
-    //   }
-    // });
-  } else {
-    repliedFound = 0;
-  }
-
-  // if ("replies" in repliesLength) {
-  //   console.log("found");
-  // }
-  // const repliesFound = repliesLength.map((e) => {
-  //   if (e.replies !== undefined) {
-  //     return e.replies;
-  //   }
-  // });
-  // console.log(repliesFound);
+  //replies
+  const totalReplies = replies.reduce((acc: number, curr: number) => {
+    return acc + curr;
+  }, 0);
 
   return (
     <div className="p-4 mx-2 flex flex-col gap-6">
@@ -66,9 +60,7 @@ function FeedbackInfo() {
           {/* right side */}
           <div className="flex items-center gap-2">
             <img className="w-6" src={commentsIcon}></img>
-            <p className="font-bold">
-              {/* {feedbackData.comments.length + repliedFound} */}
-            </p>
+            <p className="font-bold">{totalReplies + comments.length}</p>
           </div>
         </div>
       </div>
@@ -76,12 +68,12 @@ function FeedbackInfo() {
       <div className="bg-white p-4 rounded-xl flex flex-col gap-4">
         {/* Comments header */}
         <p className="font-bold">
-          {/* <span>{feedbackData.comments.length + repliedFound}</span> Comments */}
+          <span>{comments.length}</span> Comments
         </p>
         {/* comment component mapping */}
-        {/* {feedbackData.comments.map((comment: Comment) => {
+        {feedbackData.comments?.map((comment: Comment) => {
           return <MainComment comment={comment} />;
-        })} */}
+        })}
       </div>
     </div>
   );
