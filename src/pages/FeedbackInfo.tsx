@@ -61,7 +61,9 @@ function FeedbackInfo() {
           <div className="flex items-center gap-2">
             <img className="w-6" src={commentsIcon}></img>
 
-            <p className="font-bold">{totalReplies + comments.length}</p>
+            {comments.length !== 0 && (
+              <p className="font-bold">{totalReplies + comments.length}</p>
+            )}
           </div>
         </div>
       </div>
