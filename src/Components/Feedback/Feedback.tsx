@@ -17,7 +17,7 @@ function Feedback({ item }: Props) {
   console.log(item.id);
 
   return (
-    <Link to={`/feedback/${item.id}`}>
+    <Link to={`/feedback/${item.id}`} state={item}>
       <div className="bg-white rounded-xl mt-7 mx-5 p-5 flex flex-col gap-2">
         <p className="font-bold">{item.title}</p>
         <p className="text-gray-500 font-semibold">{item.description}</p>
