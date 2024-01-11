@@ -35,3 +35,5 @@ function App() {
 }
 
 export default App;
+
+// text for comments and relpy : text-gray-500

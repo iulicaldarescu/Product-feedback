@@ -1,7 +1,7 @@
 import { useState } from "react";
 import arrowUp from "../../assets/shared/icon-arrow-up.svg";
 import commentsIcon from "../../assets/shared/icon-comments.svg";
-import { FeedbackProps } from "../Feedback/Feedbacks";
+import { FeedbackProps } from "./Feedbacks";
 import { Link } from "react-router-dom";
 import { UsersReply } from "../../Types/ReplyTypes";
 import UsersComment from "../../Types/CommentTypes";

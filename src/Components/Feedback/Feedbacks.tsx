@@ -61,7 +61,6 @@ function Feedbacks() {
         <AddFeedback onClickProp={handleClick}>+ Add feedback</AddFeedback>
       </div>
       {/* Single Feedback adding */}
-
       {data[0]?.productRequests.map((item: FeedbackProps) => {
         return <Feedback item={item} />;
       })}
