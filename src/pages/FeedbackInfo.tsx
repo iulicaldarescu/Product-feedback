@@ -2,17 +2,8 @@ import { useLocation } from "react-router-dom";
 import { useState } from "react";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
 import commentsIcon from "../assets/shared/icon-comments.svg";
-import MainComment from "../Components/Comments/MainComment";
-import Comment from "../Types/CommentTypes";
-import UsersComment from "../Types/CommentTypes";
-import { UsersReply } from "../Types/ReplyTypes";
-
-type Reply = {
-  id: number;
-  content: string;
-  user: UsersComment;
-  replies: UsersReply[];
-};
+import CommentContainer from "../Components/Comments/CommentContainer";
+import CommentType from "../Types/CommentTypes";
 
 function FeedbackInfo() {
   const location = useLocation();
@@ -27,7 +18,7 @@ function FeedbackInfo() {
   //comments
   const comments = feedbackData.comments ?? []; //verifica null sau undefined
 
-  const replies = comments.map((item: Reply) => {
+  const replies = comments.map((item: CommentType) => {
     return item.replies?.length ?? 0;
   });
 
@@ -68,15 +59,15 @@ function FeedbackInfo() {
         </div>
       </div>
       {/* comments container */}
-      <div className="bg-white p-4 rounded-xl flex flex-col gap-4">
+      <div className="bg-white p-4 rounded-xl flex flex-col gap-8">
         {/* Comments header */}
         <p className="font-bold">
           <span>{comments.length}</span> Comments
         </p>
         {/* comment component mapping */}
 
-        {feedbackData.comments?.map((comment: Comment) => {
-          return <MainComment comment={comment} />;
+        {feedbackData.comments?.map((comment: CommentType) => {
+          return <CommentContainer comment={comment} />;
         })}
       </div>
     </div>

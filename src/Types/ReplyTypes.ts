@@ -4,4 +4,12 @@ export type UsersReply = {
   username: string;
 };
 
-export default UsersReply;
+export type Reply = {
+  content: string;
+  replyingTo: string;
+  user: UsersReply;
+};
+
+export type ReplyItem = {
+  replyItem: Reply;
+};
