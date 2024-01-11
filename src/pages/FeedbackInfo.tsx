@@ -1,15 +1,28 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
+import arrowLeft from "../assets/shared/icon-arrow-left.svg";
 import commentsIcon from "../assets/shared/icon-comments.svg";
 import CommentContainer from "../Components/Comments/CommentContainer";
+import AddComment from "../Components/Comments/AddComment";
 import CommentType from "../Types/CommentTypes";
+import AddFeedback from "../Components/AddingButton";
+import styles from "../styles/FeedbackInfo.module.css";
+import supabase from "../configSupa/supabaseConfiguration";
+import updateData from "../Utilities/Fetch";
 
 function FeedbackInfo() {
   const location = useLocation();
   const feedbackData = location.state;
 
   const [upVotes, setUpVotes] = useState<number | null>(feedbackData.upvotes);
+
+  const [isEditable, setIsEditable] = useState(false);
+
+  const [title, setTitle] = useState(feedbackData.title);
+  const [description, setDescription] = useState(feedbackData.description);
 
   const incrementUpVotes = () => {
     setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
@@ -27,19 +40,107 @@ function FeedbackInfo() {
     return acc + curr;
   }, 0);
 
+  //function to Edit mode
+  const handleEdit = () => {
+    setIsEditable(true);
+  };
+
+  //-------------------------------------------------------------------------------------------------
+
+  const query = useQuery({
+    queryKey: ["update"],
+    queryFn: () =>
+      updateData(
+        feedbackData.id,
+        feedbackData.title,
+        feedbackData.description,
+        feedbackData.category
+      ),
+  });
+
+  //function to save to db
+  const saveChanges = async () => {
+    const { error } = await supabase
+      .from("Product-feedback-app")
+      .update({ name: "Australia" })
+      .eq("id", 1);
+  };
+
+  // function to edit the title input
+  const handleTitleChange = (e: any) => {
+    setTitle(e.target.value);
+  };
+
+  // function to edit the description input
+  const handleDescriptionChange = (e: any) => {
+    setDescription(e.target.value);
+  };
+
   return (
     <div className="p-4 mx-2 flex flex-col gap-6">
-      <div className="bg-white rounded-xl mt-7 p-4 flex flex-col gap-2">
-        <p className="font-bold">{feedbackData.title}</p>
-        <p className="text-gray-500 font-semibold">
-          {feedbackData.description}
-        </p>
+      {/* header and edit button */}
+      <div className="flex justify-between">
+        {/* left side */}
+
+        <Link className="flex items-center gap-2" to="/">
+          <img src={arrowLeft}></img>
+
+          <p className="text-gray-500">Go Back</p>
+        </Link>
+
+        {/* right side */}
+        <div className="text-white cursor-pointer">
+          {isEditable && (
+            <div className="bg-green-400 rounded-lg">
+              <AddFeedback onClickProp={saveChanges}>Save changes</AddFeedback>
+            </div>
+          )}
+          {!isEditable && (
+            <div className=" bg-purple-800 rounded-lg">
+              <AddFeedback onClickProp={handleEdit}>Edit Feedback</AddFeedback>
+            </div>
+          )}
+        </div>
+      </div>
+      <div className="bg-white rounded-xl mt-7 p-4 flex flex-col gap-2 ">
+        {isEditable ? (
+          <input
+            className="font-bold outline-none"
+            value={title}
+            onChange={(e) => handleTitleChange(e)}
+          ></input>
+        ) : (
+          <p className="font-bold outline-none">{feedbackData.title}</p>
+        )}
+
+        {isEditable ? (
+          <textarea
+            className="outline-none resize-none"
+            value={description}
+            onChange={(e) => handleDescriptionChange(e)}
+          ></textarea>
+        ) : (
+          <p className=" outline-none">{feedbackData.description}</p>
+        )}
         {/* array of things */}
         <div className="flex flex-wrap gap-2">
-          <p className="bg-[#e6e9f6] text-[#4661e6] font-bold py-1 px-4 rounded-xl capitalize">
-            {" "}
-            {feedbackData.category}
-          </p>
+          {!isEditable ? (
+            <p className="bg-[#e6e9f6] text-[#4661e6] font-bold py-1 px-4 rounded-xl capitalize">
+              {" "}
+              {feedbackData.category}
+            </p>
+          ) : (
+            <select
+              className={`outline-none bg-[#e6e9f6] text-[#4661e6] font-bold py-1 px-4 rounded-xl capitalize text-center ${styles["remove-select-arrow"]}`}
+            >
+              <option selected>{feedbackData.category}</option>
+              <option value="">Enhancement</option>
+              <option value="">UI</option>
+              <option value="">UX</option>
+              <option value="">Bug</option>
+              <option value="">Feature</option>
+            </select>
+          )}
         </div>
         {/* bottom container */}
         <div className="flex justify-between mt-3">
@@ -69,6 +170,9 @@ function FeedbackInfo() {
         {feedbackData.comments?.map((comment: CommentType) => {
           return <CommentContainer comment={comment} />;
         })}
+      </div>
+      <div>
+        <AddComment />
       </div>
     </div>
   );

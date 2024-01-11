@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "../../Utilities/Fetch";
 import Loading from "../Loading/Loading";
-import { useState } from "react";
 
 export type FeedbackProps = {
   category: string;
@@ -18,17 +17,6 @@ export type FeedbackProps = {
 };
 
 function Feedbacks() {
-  ///////////////////
-  const [commentInput, setCommentInput] = useState<string>("");
-  const [commentCharactersLeft, setCommentCharactersLeft] =
-    useState<number>(250);
-
-  const handleChange = (e: any) => {
-    const remainingChars = Math.max(0, 250 - e.target.value.length);
-    setCommentCharactersLeft(remainingChars);
-  };
-
-  ///////////////
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -64,28 +52,6 @@ function Feedbacks() {
       {data[0]?.productRequests.map((item: FeedbackProps) => {
         return <Feedback item={item} />;
       })}
-
-      <div className=" bg-white rounded-xl mt-7 mx-5 p-5">
-        {/* input of the comment */}
-        <div className="flex flex-col gap-4 pb-3">
-          <label htmlFor="commentInput" className=" text-black font-bold ">
-            Add Comment
-          </label>
-
-          <textarea
-            onChange={handleChange}
-            id="commentInput"
-            className="bg-[#ededed] w-full h-24 p-3"
-            placeholder="Type your comment here"
-            maxLength={250}
-          ></textarea>
-        </div>
-
-        <div className="flex justify-between">
-          <p>{commentCharactersLeft}</p>
-          <button>Adding button</button>
-        </div>
-      </div>
     </>
   );
 }
