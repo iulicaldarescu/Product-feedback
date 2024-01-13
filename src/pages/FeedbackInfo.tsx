@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
 import arrowLeft from "../assets/shared/icon-arrow-left.svg";
@@ -17,7 +17,6 @@ import {
   updateDataIteration,
   updateProductRequest,
 } from "../Types/FeedbackInfoTypes";
-//raul is a madarfacar boss
 
 function FeedbackInfo() {
   const location = useLocation();
