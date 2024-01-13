@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
 import arrowLeft from "../assets/shared/icon-arrow-left.svg";
@@ -11,7 +11,13 @@ import CommentType from "../Types/CommentTypes";
 import AddFeedback from "../Components/AddingButton";
 import styles from "../styles/FeedbackInfo.module.css";
 import supabase from "../configSupa/supabaseConfiguration";
-import updateData from "../Utilities/Fetch";
+import fetchData from "../Utilities/Fetch";
+import Loading from "../Components/Loading/Loading";
+
+type SaveChangesData = {
+  title: string;
+  description: string;
+};
 
 function FeedbackInfo() {
   const location = useLocation();
@@ -45,25 +51,53 @@ function FeedbackInfo() {
     setIsEditable(true);
   };
 
-  //-------------------------------------------------------------------------------------------------
-
-  const query = useQuery({
-    queryKey: ["update"],
-    queryFn: () =>
-      updateData(
-        feedbackData.id,
-        feedbackData.title,
-        feedbackData.description,
-        feedbackData.category
-      ),
+  const { data: currentData, isLoading } = useQuery({
+    queryKey: ["myData"],
+    queryFn: () => fetchData(),
   });
 
-  //function to save to db
-  const saveChanges = async () => {
-    const { error } = await supabase
-      .from("Product-feedback-app")
-      .update({ name: "Australia" })
-      .eq("id", 1);
+  const updateProductRequestTitle = async (
+    rowId,
+    productRequestId,
+    newTitle
+  ) => {
+    try {
+      if (isLoading) {
+        return <Loading />;
+      }
+
+      console.log(currentData);
+      // Find and update the specific element
+      const updatedData = currentData[0].productRequests.map((request) => {
+        return request.id === productRequestId
+          ? { ...request, title: newTitle }
+          : request;
+      });
+      console.log(updatedData);
+
+      // Update the entire array
+      const { data: updateData, updateError } = await supabase
+        .from("Product-feedback-app")
+        .update({ productRequests: updatedData })
+        .eq("id", rowId);
+
+      if (updateError) {
+        throw new Error("Error updating data");
+      }
+
+      return updateData;
+    } catch (error) {
+      console.error("Error updating data:", error);
+      throw error;
+    }
+  };
+
+  const handleClick = () => {
+    updateProductRequestTitle(
+      "7db0b938-adff-477a-8c64-a9bd28c2b652",
+      feedbackData.id,
+      title
+    );
   };
 
   // function to edit the title input
@@ -92,7 +126,7 @@ function FeedbackInfo() {
         <div className="text-white cursor-pointer">
           {isEditable && (
             <div className="bg-green-400 rounded-lg">
-              <AddFeedback onClickProp={saveChanges}>Save changes</AddFeedback>
+              <AddFeedback onClickProp={handleClick}>Save changes</AddFeedback>
             </div>
           )}
           {!isEditable && (
