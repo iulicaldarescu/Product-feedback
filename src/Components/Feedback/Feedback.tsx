@@ -9,6 +9,7 @@ import UsersComment from "../../Types/CommentTypes";
 // custom TYPESCRIPT !!!!!!!!
 export type Props = {
   item: FeedbackProps;
+  useQueryRefetch: () => void;
 };
 
 type Reply = {
@@ -18,7 +19,7 @@ type Reply = {
   replies: UsersReply[];
 };
 
-function Feedback({ item }: Props) {
+function Feedback({ item, useQueryRefetch }: Props) {
   const [upVotes, setUpVotes] = useState<number>(item.upvotes);
 
   let commentLength = item.comments ?? [];

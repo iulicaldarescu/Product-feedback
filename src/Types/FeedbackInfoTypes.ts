@@ -2,7 +2,7 @@ import CommentType from "./CommentTypes";
 
 export type updateProductRequest = {
   rowId: any;
-  productRequestId: string;
+  productRequestId: number;
   newTitle: string;
   newDescription: string | number;
 };

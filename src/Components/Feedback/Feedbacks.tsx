@@ -24,7 +24,7 @@ function Feedbacks() {
   };
 
   //REACT QUERRY FETCH
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ["myData"],
     queryFn: () => fetchData(),
   });
@@ -50,7 +50,7 @@ function Feedbacks() {
       </div>
       {/* Single Feedback adding */}
       {data[0]?.productRequests.map((item: FeedbackProps) => {
-        return <Feedback item={item} />;
+        return <Feedback item={item} useQueryRefetch={refetch} />;
       })}
     </>
   );

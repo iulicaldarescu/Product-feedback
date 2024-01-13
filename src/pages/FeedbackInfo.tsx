@@ -19,8 +19,7 @@ import {
 } from "../Types/FeedbackInfoTypes";
 
 function FeedbackInfo() {
-  const location = useLocation();
-  const feedbackData = location.state;
+  const { state: feedbackData } = useLocation();
 
   const [upVotes, setUpVotes] = useState<number | null>(feedbackData.upvotes);
 
@@ -51,7 +50,7 @@ function FeedbackInfo() {
   };
 
   const { data: currentData, isLoading } = useQuery({
-    queryKey: ["myData"],
+    queryKey: ["updateData"],
     queryFn: () => fetchData(),
   });
 
@@ -63,21 +62,28 @@ function FeedbackInfo() {
   }: updateProductRequest) => {
     try {
       if (isLoading) {
-        return <Loading />;
+        <Loading></Loading>;
       }
 
-      console.log(currentData);
-      // Find and update the specific element
-      const updatedData = currentData[0].productRequests.map(
+      const dataByRowId = currentData.filter((row: any) => {
+        return row.id === rowId;
+      });
+
+      console.log(dataByRowId);
+
+      // console.log(test[0].productRequests);
+
+      const updatedData = dataByRowId[0].productRequests.map(
         (request: updateDataIteration) => {
-          return request.id.toString() === productRequestId
+          console.log(request);
+          return request.id === productRequestId
             ? { ...request, title: newTitle, description: newDescription }
             : request;
         }
       );
-      console.log(updatedData);
 
-      // Update the entire array
+      // console.log(updatedData);
+
       const { data: updateData, updateError } = await supabase
         .from("Product-feedback-app")
         .update({ productRequests: updatedData })
@@ -97,7 +103,7 @@ function FeedbackInfo() {
   //de retinut
   const handleClick = () => {
     updateProductRequestTitle({
-      rowId: "7db0b938-adff-477a-8c64-a9bd28c2b652",
+      rowId: "90813cf7-fdee-4f10-aef5-ce2c1950c9c3",
       productRequestId: feedbackData.id,
       newTitle: title,
       newDescription: description,
