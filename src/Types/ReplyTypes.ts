@@ -13,3 +13,5 @@ export type Reply = {
 export type ReplyItem = {
   replyItem: Reply;
 };
+
+export default Reply;

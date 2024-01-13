@@ -13,11 +13,10 @@ import styles from "../styles/FeedbackInfo.module.css";
 import supabase from "../configSupa/supabaseConfiguration";
 import fetchData from "../Utilities/Fetch";
 import Loading from "../Components/Loading/Loading";
-
-type SaveChangesData = {
-  title: string;
-  description: string;
-};
+import {
+  updateDataIteration,
+  updateProductRequest,
+} from "../Types/FeedbackInfoTypes";
 
 function FeedbackInfo() {
   const location = useLocation();
@@ -56,11 +55,12 @@ function FeedbackInfo() {
     queryFn: () => fetchData(),
   });
 
-  const updateProductRequestTitle = async (
+  const updateProductRequestTitle = async ({
     rowId,
     productRequestId,
-    newTitle
-  ) => {
+    newTitle,
+    newDescription,
+  }: updateProductRequest) => {
     try {
       if (isLoading) {
         return <Loading />;
@@ -68,11 +68,13 @@ function FeedbackInfo() {
 
       console.log(currentData);
       // Find and update the specific element
-      const updatedData = currentData[0].productRequests.map((request) => {
-        return request.id === productRequestId
-          ? { ...request, title: newTitle }
-          : request;
-      });
+      const updatedData = currentData[0].productRequests.map(
+        (request: updateDataIteration) => {
+          return request.id.toString() === productRequestId
+            ? { ...request, title: newTitle, description: newDescription }
+            : request;
+        }
+      );
       console.log(updatedData);
 
       // Update the entire array
@@ -92,12 +94,14 @@ function FeedbackInfo() {
     }
   };
 
+  //de retinut
   const handleClick = () => {
-    updateProductRequestTitle(
-      "7db0b938-adff-477a-8c64-a9bd28c2b652",
-      feedbackData.id,
-      title
-    );
+    updateProductRequestTitle({
+      rowId: "7db0b938-adff-477a-8c64-a9bd28c2b652",
+      productRequestId: feedbackData.id,
+      newTitle: title,
+      newDescription: description,
+    });
   };
 
   // function to edit the title input
