@@ -11,7 +11,7 @@ function NewFeedback() {
   const { state: dataObjectSupabaseRow } = useLocation();
   // object structure to be update
   const [mainFeedbackObject, setMainFeedbackObject] = useState({
-    id: 0,
+    id: dataObjectSupabaseRow.productRequests.length + 1,
     title: "",
     status: "",
     upvotes: 0,
@@ -30,10 +30,13 @@ function NewFeedback() {
 
   // add feedback button logic, set unic id on click, for above created and updated object
   const addFeedbackFunction = async () => {
-    setMainFeedbackObject({
-      ...mainFeedbackObject,
-      id: dataObjectSupabaseRow.productRequests.length + 1,
-    });
+    // async behaviour of stateUpdate resulted in a 0 id each time of function execution ...
+    // so moved the id set on the object creation instantly because anyway user is directed on another page after feedback add
+
+    // setMainFeedbackObject((prevObject) => ({
+    //   ...prevObject,
+    //   id: dataObjectSupabaseRow.productRequests.length + 1,
+    // }));
 
     // build prototype array
     const newArr = [
