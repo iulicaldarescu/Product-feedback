@@ -39,8 +39,10 @@ function Feedback({ item }: Props) {
   return (
     <Link to={`/feedback/${item.id}`} state={item}>
       <div className="bg-white rounded-xl mt-7 mx-5 p-5 flex flex-col gap-2">
-        <p className="font-bold">{item.title}</p>
-        <p className="text-gray-500 font-semibold">{item.description}</p>
+        <p className="font-bold break-words">{item.title}</p>
+        <p className="text-gray-500 font-semibold break-words">
+          {item.description}
+        </p>
         {/* array of things */}
         <div className="flex flex-wrap gap-2">
           <p className="bg-[#e6e9f6] text-[#4661e6] font-bold py-1 px-4 rounded-xl capitalize">
