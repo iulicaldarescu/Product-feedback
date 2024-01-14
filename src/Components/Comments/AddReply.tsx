@@ -3,6 +3,7 @@ import { useRef } from "react";
 import fetchData from "../../Utilities/Fetch";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../Loading/Loading";
+import { TABLE_NAME } from "../../Utilities/CommonVariables";
 
 function AddReply({ setIsReplyInputOpen, comment }: any) {
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -31,8 +32,8 @@ function AddReply({ setIsReplyInputOpen, comment }: any) {
         <Loading />;
       }
 
-      const updatedArray = allProductRequests.map((productRequest) => {
-        const updatedReplies = productRequest?.comments?.find((item) => {
+      const updatedArray = allProductRequests.map((productRequest: any) => {
+        const updatedReplies = productRequest?.comments?.find((item: any) => {
           return item.id === comment.id;
         });
 
@@ -69,7 +70,7 @@ function AddReply({ setIsReplyInputOpen, comment }: any) {
       });
 
       const { error } = await supabase
-        .from("Product-feedback-app")
+        .from(TABLE_NAME)
         .update({ productRequests: updatedArray })
         .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
     } catch {}

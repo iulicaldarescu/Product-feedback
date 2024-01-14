@@ -1,4 +1,3 @@
-import styles from "../styles/NewFeedback.module.css";
 import AddFeedback from "../Components/AddingButton";
 import { useNavigate, useLocation } from "react-router-dom";
 import supabase from "../configSupa/supabaseConfiguration";
