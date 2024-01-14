@@ -15,9 +15,9 @@ function ReplyContainer({ replyItem }: ReplyItem) {
         <div className="flex text-sm justify-between w-full">
           {/* name and user nickname container */}
           <div className="">
-            <p className="font-semibold">{replyItem.user.name}</p>
+            <p className="font-semibold">{replyItem?.user?.name}</p>
             <p className="text-blue-500 font-semibold">
-              {replyItem.user.username}
+              {replyItem?.user?.username}
             </p>
           </div>
           {/* Reply button container */}

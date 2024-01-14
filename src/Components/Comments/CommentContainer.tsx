@@ -3,10 +3,12 @@ import img from "../../assets/user-images/image-judah.jpg";
 import ReplyContainer from "./ReplyContainer";
 import { Reply } from "../../Types/ReplyTypes";
 import { useState } from "react";
+import AddReply from "./AddReply";
 
 // This component represents the main comment appearance without sub-comments
 function CommentContainer({ comment }: PropComment) {
   const [showRepliesFlag, setShowRepliesFlag] = useState<boolean>(false);
+  const [isReplyInputOpen, setIsReplyInputOpen] = useState<boolean>(false);
 
   const displayReplies = () => {
     setShowRepliesFlag(!showRepliesFlag);
@@ -14,8 +16,9 @@ function CommentContainer({ comment }: PropComment) {
 
   const repliesArr = comment.replies ?? [];
 
-  const test = () => {
-    console.log(comment.user.name);
+  const addReply = () => {
+    setIsReplyInputOpen(true);
+    console.log(comment);
   };
 
   return (
@@ -39,17 +42,25 @@ function CommentContainer({ comment }: PropComment) {
                 </p>
               </div>
               {/* Reply button container */}
-              <div className="flex justify-center items-center">
-                <p className="text-blue-500 font-semibold" onClick={test}>
+              <div className="flex flex-col justify-center items-center">
+                <p className="text-blue-500 font-semibold" onClick={addReply}>
                   Reply
                 </p>
               </div>
             </div>
             {/* bottom container */}
-            <div>
+            <div className="flex flex-col">
               {/* Comment text */}
               {/* text exceeded.... tailwind class => truncate w-full */}
               <p className="text-sm text-gray-500">{comment.content}</p>
+              {isReplyInputOpen && (
+                <div>
+                  <AddReply
+                    setIsReplyInputOpen={setIsReplyInputOpen}
+                    comment={comment}
+                  />
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -8,7 +8,7 @@ import commentsIcon from "../assets/shared/icon-comments.svg";
 import CommentContainer from "../Components/Comments/CommentContainer";
 import AddComment from "../Components/Comments/AddComment";
 import CommentType from "../Types/CommentTypes";
-import AddReply from "../Components/Comments/AddReply";
+
 import AddFeedback from "../Components/AddingButton";
 import styles from "../styles/FeedbackInfo.module.css";
 import supabase from "../configSupa/supabaseConfiguration";
@@ -67,7 +67,7 @@ function FeedbackInfo() {
   }: updateProductRequest) => {
     try {
       if (isLoading) {
-        <Loading></Loading>;
+        <Loading />;
       }
 
       const dataByRowId = currentData.filter((row: any) => {
