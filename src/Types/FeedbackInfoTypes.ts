@@ -5,6 +5,7 @@ export type updateProductRequest = {
   productRequestId: number;
   newTitle: string;
   newDescription: string | number;
+  newCategory: string;
 };
 
 export type updateDataIteration = {

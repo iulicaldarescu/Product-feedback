@@ -8,6 +8,7 @@ import commentsIcon from "../assets/shared/icon-comments.svg";
 import CommentContainer from "../Components/Comments/CommentContainer";
 import AddComment from "../Components/Comments/AddComment";
 import CommentType from "../Types/CommentTypes";
+import AddReply from "../Components/Comments/AddReply";
 import AddFeedback from "../Components/AddingButton";
 import styles from "../styles/FeedbackInfo.module.css";
 import supabase from "../configSupa/supabaseConfiguration";
@@ -20,6 +21,7 @@ import {
 
 function FeedbackInfo() {
   const { state: feedbackData } = useLocation();
+  console.log(feedbackData);
 
   const [upVotes, setUpVotes] = useState<number | null>(feedbackData.upvotes);
 
@@ -27,6 +29,7 @@ function FeedbackInfo() {
 
   const [title, setTitle] = useState(feedbackData.title);
   const [description, setDescription] = useState(feedbackData.description);
+  const [category, setCategory] = useState(feedbackData.category);
 
   const incrementUpVotes = () => {
     setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
@@ -54,11 +57,13 @@ function FeedbackInfo() {
     queryFn: () => fetchData(),
   });
 
+  //update function title, description and category
   const updateProductRequestTitle = async ({
     rowId,
     productRequestId,
     newTitle,
     newDescription,
+    newCategory,
   }: updateProductRequest) => {
     try {
       if (isLoading) {
@@ -71,18 +76,20 @@ function FeedbackInfo() {
 
       console.log(dataByRowId);
 
-      // console.log(test[0].productRequests);
-
       const updatedData = dataByRowId[0].productRequests.map(
         (request: updateDataIteration) => {
-          console.log(request);
           return request.id === productRequestId
-            ? { ...request, title: newTitle, description: newDescription }
+            ? {
+                ...request,
+                title: newTitle,
+                description: newDescription,
+                category: newCategory,
+              }
             : request;
         }
       );
 
-      // console.log(updatedData);
+      console.log(updatedData);
 
       const { data: updateData, updateError } = await supabase
         .from("Product-feedback-app")
@@ -107,6 +114,7 @@ function FeedbackInfo() {
       productRequestId: feedbackData.id,
       newTitle: title,
       newDescription: description,
+      newCategory: category,
     });
   };
 
@@ -118,6 +126,11 @@ function FeedbackInfo() {
   // function to edit the description input
   const handleDescriptionChange = (e: any) => {
     setDescription(e.target.value);
+  };
+
+  //function to get the category
+  const handleCategory = (e: any) => {
+    setCategory(e.target.value);
   };
 
   return (
@@ -171,18 +184,20 @@ function FeedbackInfo() {
           {!isEditable ? (
             <p className="bg-[#e6e9f6] text-[#4661e6] font-bold py-1 px-4 rounded-xl capitalize">
               {" "}
-              {feedbackData.category}
+              {category}
             </p>
           ) : (
             <select
               className={`outline-none bg-[#e6e9f6] text-[#4661e6] font-bold py-1 px-4 rounded-xl capitalize text-center ${styles["remove-select-arrow"]}`}
+              value={category}
+              onChange={handleCategory}
             >
               <option selected>{feedbackData.category}</option>
-              <option value="">Enhancement</option>
-              <option value="">UI</option>
-              <option value="">UX</option>
-              <option value="">Bug</option>
-              <option value="">Feature</option>
+              <option value="Enhancement">Enhancement</option>
+              <option value="UI">UI</option>
+              <option value="UX">UX</option>
+              <option value="Bug">Bug</option>
+              <option value="Feature">Feature</option>
             </select>
           )}
         </div>

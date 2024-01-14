@@ -14,6 +14,10 @@ function CommentContainer({ comment }: PropComment) {
 
   const repliesArr = comment.replies ?? [];
 
+  const test = () => {
+    console.log(comment.user.name);
+  };
+
   return (
     <div>
       {/* parent container of the holy comment container*/}
@@ -36,7 +40,9 @@ function CommentContainer({ comment }: PropComment) {
               </div>
               {/* Reply button container */}
               <div className="flex justify-center items-center">
-                <p className="text-blue-500 font-semibold">Reply</p>
+                <p className="text-blue-500 font-semibold" onClick={test}>
+                  Reply
+                </p>
               </div>
             </div>
             {/* bottom container */}

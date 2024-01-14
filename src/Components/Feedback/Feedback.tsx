@@ -9,7 +9,6 @@ import UsersComment from "../../Types/CommentTypes";
 // custom TYPESCRIPT !!!!!!!!
 export type Props = {
   item: FeedbackProps;
-  useQueryRefetch: () => void;
 };
 
 type Reply = {
@@ -19,8 +18,8 @@ type Reply = {
   replies: UsersReply[];
 };
 
-function Feedback({ item, useQueryRefetch }: Props) {
-  const [upVotes, setUpVotes] = useState<number>(item.upvotes);
+function Feedback({ item }: Props) {
+  const [upVotes, setUpVotes] = useState<number | null>(item.upvotes);
 
   let commentLength = item.comments ?? [];
 
@@ -32,7 +31,10 @@ function Feedback({ item, useQueryRefetch }: Props) {
     return acc + curr;
   }, 0);
 
-  console.log(numberOfReplies);
+  const incrementUpvotes = (e: any) => {
+    e.preventDefault();
+    setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
+  };
 
   return (
     <Link to={`/feedback/${item.id}`} state={item}>
@@ -49,11 +51,7 @@ function Feedback({ item, useQueryRefetch }: Props) {
         <div className="flex justify-between mt-3">
           {/* left side */}
           <div className=" bg-[#e6e9f6] flex py-1 px-4 rounded-xl gap-2 items-center">
-            <img
-              onClick={() => setUpVotes((prev) => prev + 1)}
-              className="w-3"
-              src={arrowUp}
-            ></img>
+            <img className="w-3" src={arrowUp} onClick={incrementUpvotes}></img>
             <p className="font-bold">{upVotes}</p>
           </div>
           {/* right side */}
