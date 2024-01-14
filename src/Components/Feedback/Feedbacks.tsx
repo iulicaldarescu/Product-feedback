@@ -1,10 +1,10 @@
 import arrowDown from "../../assets/shared/icon-arrow-down.svg";
 import Feedback from "./Feedback";
 import AddFeedback from "../AddingButton";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import fetchData from "../../Utilities/Fetch";
 import Loading from "../Loading/Loading";
+import { Link } from "react-router-dom";
 
 export type FeedbackProps = {
   category: string;
@@ -17,12 +17,6 @@ export type FeedbackProps = {
 };
 
 function Feedbacks() {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate("/new-feedback");
-  };
-
   //REACT QUERRY FETCH
   const { data, isLoading } = useQuery({
     queryKey: ["myData"],
@@ -32,7 +26,7 @@ function Feedbacks() {
   if (isLoading) {
     return <Loading />;
   }
-
+  console.log(data[0]);
   return (
     <>
       <div className="flex  justify-between items-center bg-blue-950 text-white p-5">
@@ -45,8 +39,11 @@ function Feedbacks() {
             </option>
           </select>
         </div>
-
-        <AddFeedback onClickProp={handleClick}>+ Add feedback</AddFeedback>
+        <div className="bg-[#ae1feb] rounded-lg">
+          <Link to="/new-feedback" state={data[0]}>
+            <AddFeedback>+ Add feedback</AddFeedback>
+          </Link>
+        </div>
       </div>
       {/* Single Feedback adding */}
       {data[0]?.productRequests.map((item: FeedbackProps) => {

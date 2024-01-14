@@ -18,6 +18,7 @@ import {
   updateDataIteration,
   updateProductRequest,
 } from "../Types/FeedbackInfoTypes";
+import { TABLE_NAME } from "../Utilities/CommonVariables";
 
 function FeedbackInfo() {
   const { state: feedbackData } = useLocation();
@@ -92,7 +93,7 @@ function FeedbackInfo() {
       console.log(updatedData);
 
       const { data: updateData, updateError } = await supabase
-        .from("Product-feedback-app")
+        .from(TABLE_NAME)
         .update({ productRequests: updatedData })
         .eq("id", rowId);
 

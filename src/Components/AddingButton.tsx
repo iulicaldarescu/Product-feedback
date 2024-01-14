@@ -5,7 +5,7 @@ type AddFeedbackProps = {
 
 function AddFeedback({ onClickProp, children }: AddFeedbackProps) {
   return (
-    <button className=" p-3 rounded-lg" onClick={onClickProp}>
+    <button className="p-3 rounded-lg" onClick={onClickProp}>
       {children || "+ Add feedback"}
     </button>
   );
