@@ -3,12 +3,14 @@ import AddFeedback from "../Components/AddingButton";
 import { useNavigate, useLocation } from "react-router-dom";
 import supabase from "../configSupa/supabaseConfiguration";
 import { TABLE_NAME } from "../Utilities/CommonVariables";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function NewFeedback() {
   const navigate = useNavigate();
   const { state: dataObjectSupabaseRow } = useLocation();
   // object structure to be update
-  let mainFeedbackObject = {
+  const [mainFeedbackObject, setMainFeedbackObject] = useState({
     id: 0,
     title: "",
     status: "",
@@ -16,22 +18,22 @@ function NewFeedback() {
     category: "",
     comments: [],
     description: "",
-  };
+  });
 
   //inputs value get function update object with input values
   const handleChange = (e: any) => {
-    mainFeedbackObject = {
+    setMainFeedbackObject({
       ...mainFeedbackObject,
       [e.target.name]: e.target.value,
-    };
+    });
   };
 
   // add feedback button logic, set unic id on click, for above created and updated object
   const addFeedbackFunction = async () => {
-    mainFeedbackObject = {
+    setMainFeedbackObject({
       ...mainFeedbackObject,
       id: dataObjectSupabaseRow.productRequests.length + 1,
-    };
+    });
 
     // build prototype array
     const newArr = [
@@ -105,11 +107,20 @@ function NewFeedback() {
 
       {/* add feeback and cancel buttons container */}
       <div className="flex flex-col gap-3 text-white">
-        <div className="bg-[#ae1feb] flex justify-center rounded-lg">
-          <AddFeedback onClickProp={addFeedbackFunction}>
-            Add feedback
-          </AddFeedback>
-        </div>
+        {mainFeedbackObject.title !== "" &&
+        mainFeedbackObject.description !== "" &&
+        mainFeedbackObject.category !== "" ? (
+          <Link to="/" className="bg-[#ae1feb] flex justify-center rounded-lg">
+            <AddFeedback onClickProp={addFeedbackFunction}>
+              Add feedback
+            </AddFeedback>
+          </Link>
+        ) : (
+          <p className="text-red-500 text-center font-semibold text-lg">
+            All fields must be completed !!
+          </p>
+        )}
+
         <button
           className="bg-blue-950 p-3 rounded-lg"
           onClick={() => navigate("/")}
