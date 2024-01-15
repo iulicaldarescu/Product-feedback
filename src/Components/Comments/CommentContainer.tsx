@@ -78,7 +78,7 @@ function CommentContainer({ comment }: PropComment) {
       <div className="flex flex-col gap-1">
         {showRepliesFlag &&
           repliesArr?.map((replyItem: Reply) => {
-            return <ReplyContainer replyItem={replyItem} />;
+            return <ReplyContainer replyItem={replyItem} comment={comment} />;
           })}
       </div>
     </div>

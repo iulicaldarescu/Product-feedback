@@ -31,7 +31,6 @@ function AddReply({ setIsReplyInputOpen, comment }: any) {
       if (isLoading) {
         <Loading />;
       }
-
       const updatedArray = allProductRequests.map((productRequest: any) => {
         const updatedReplies = productRequest?.comments?.find((item: any) => {
           return item.id === comment.id;

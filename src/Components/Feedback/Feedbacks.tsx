@@ -5,6 +5,9 @@ import { useQuery } from "@tanstack/react-query";
 import fetchData from "../../Utilities/Fetch";
 import Loading from "../Loading/Loading";
 import { Link } from "react-router-dom";
+import styles from "../../styles/Feedbacks.module.css";
+import _ from "lodash";
+import { useEffect, useState } from "react";
 
 export type FeedbackProps = {
   category: string;
@@ -27,17 +30,29 @@ function Feedbacks() {
     return <Loading />;
   }
   console.log(data[0]);
+
   return (
     <>
       <div className="flex  justify-between items-center bg-blue-950 text-white p-5">
-        <div>
-          <label htmlFor="votes">Sort by: </label>
-          <select id="votes" name="votes" className="bg-blue-950">
-            <option value="most-upvotes">
-              Most Upvotes
-              <img src={arrowDown} alt="arrow-down"></img>
-            </option>
-          </select>
+        <div className="flex  items-center">
+          <div>
+            <label htmlFor="votes">Sort by: </label>
+            <select
+              id="votes"
+              name="votes"
+              className={`bg-blue-950 ${styles["select"]} outline-none`}
+            >
+              <option value="filter" defaultValue="filter">
+                Filter
+              </option>
+              <option value="most-upvotes">Most Upvotes</option>
+              <option value="most-commented">Most Comments</option>
+            </select>
+          </div>
+
+          <div>
+            <img src={arrowDown}></img>
+          </div>
         </div>
         <div className="bg-[#ae1feb] rounded-lg">
           <Link to="/new-feedback" state={data[0]}>

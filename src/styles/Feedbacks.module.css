@@ -1,0 +1,15 @@
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-right: 1em;
+}
+
+select {
+  padding: 0.5em;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  color: #333;
+}
