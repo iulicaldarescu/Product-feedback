@@ -92,7 +92,7 @@ function Feedbacks() {
       </div>
       {/* Single Feedback adding */}
       {filteredArray?.map((item: FeedbackProps) => {
-        return <Feedback item={item} />;
+        return <Feedback item={item} prodReqArr={data[0].productRequests} />;
       })}
     </>
   );
