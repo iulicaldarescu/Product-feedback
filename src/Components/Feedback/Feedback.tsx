@@ -23,6 +23,7 @@ type Reply = {
 
 function Feedback({ item, prodReqArr }: Props) {
   const [upVotes, setUpVotes] = useState<number>(item.upvotes);
+  const [flag, setFlag] = useState(false);
 
   let commentLength = item.comments ?? [];
 
@@ -36,19 +37,26 @@ function Feedback({ item, prodReqArr }: Props) {
 
   const incrementUpvotes = async (e) => {
     e.preventDefault();
-    setUpVotes((prev) => prev + 1);
+
+    const incrementedUpvote = upVotes + 1;
+    setUpVotes(incrementedUpvote);
+
     const newArr = prodReqArr.map((itemObj: any) => {
       return item.id === itemObj.id
-        ? { ...itemObj, upvotes: upVotes }
+        ? { ...itemObj, upvotes: incrementedUpvote }
         : itemObj;
     });
 
+    if (!flag) {
+      setFlag(true);
+    }
+
     console.log(newArr);
 
-    // const { error } = await supabase
-    //   .from("Product-feedback-app")
-    //   .update({ productRequests: newArr })
-    //   .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+    const { error } = await supabase
+      .from("Product-feedback-app")
+      .update({ productRequests: newArr })
+      .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
   };
 
   return (
@@ -68,8 +76,8 @@ function Feedback({ item, prodReqArr }: Props) {
         <div className="flex justify-between mt-3">
           {/* left side */}
           <div className=" bg-[#e6e9f6] flex py-1 px-4 rounded-xl gap-2 items-center">
-            <img className="w-3" src={arrowUp}></img>
-            <FeedbackUpvotes incrementFunction={incrementUpvotes}>
+            <img className="w-full" src={arrowUp}></img>
+            <FeedbackUpvotes incrementFunction={incrementUpvotes} flag={flag}>
               {upVotes}
             </FeedbackUpvotes>
           </div>
