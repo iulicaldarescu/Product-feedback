@@ -23,40 +23,47 @@ type Reply = {
 
 function Feedback({ item, prodReqArr }: Props) {
   const [upVotes, setUpVotes] = useState<number>(item.upvotes);
-  const [flag, setFlag] = useState(false);
+  const [isUpvoteClicked, setIsUpvoteClicked] = useState(false);
 
   let commentLength = item.comments ?? [];
 
-  const replies = commentLength.map((item: Reply) => {
-    return item.replies?.length ?? 0;
-  });
+  // const replies = commentLength.map((item: Reply) => {
+  //   return item.replies?.length ?? 0;
+  // });
 
-  const numberOfReplies = replies.reduce((acc: number, curr: number) => {
-    return acc + curr;
-  }, 0);
+  // const numberOfReplies = replies.reduce((acc: number, curr: number) => {
+  //   return acc + curr;
+  // }, 0);
 
   const incrementUpvotes = async (e) => {
     e.preventDefault();
 
-    const incrementedUpvote = upVotes + 1;
-    setUpVotes(incrementedUpvote);
+    if (isUpvoteClicked) {
+      return;
+    }
+
+    if (!isUpvoteClicked) {
+      setUpVotes((prev) => prev + 1);
+    }
 
     const newArr = prodReqArr.map((itemObj: any) => {
       return item.id === itemObj.id
-        ? { ...itemObj, upvotes: incrementedUpvote }
+        ? {
+            ...itemObj,
+            upvotes: item.id === itemObj.id ? upVotes + 1 : itemObj.upvotes,
+          }
         : itemObj;
     });
 
-    if (!flag) {
-      setFlag(true);
-    }
-
     console.log(newArr);
+    console.log(isUpvoteClicked);
 
     const { error } = await supabase
       .from("Product-feedback-app")
       .update({ productRequests: newArr })
       .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+
+    setIsUpvoteClicked(true);
   };
 
   return (
@@ -77,7 +84,7 @@ function Feedback({ item, prodReqArr }: Props) {
           {/* left side */}
           <div className=" bg-[#e6e9f6] flex py-1 px-4 rounded-xl gap-2 items-center">
             <img className="w-full" src={arrowUp}></img>
-            <FeedbackUpvotes incrementFunction={incrementUpvotes} flag={flag}>
+            <FeedbackUpvotes incrementFunction={incrementUpvotes}>
               {upVotes}
             </FeedbackUpvotes>
           </div>

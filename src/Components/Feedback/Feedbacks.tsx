@@ -21,6 +21,7 @@ export type FeedbackProps = {
 function Feedbacks() {
   const [filteredArray, setFilteredArray] = useState<any>([]);
   const [filterValue, setFilterValue] = useState<string>("");
+
   //REACT QUERRY FETCH
   const { data, isLoading } = useQuery({
     queryKey: ["myData"],
@@ -92,7 +93,13 @@ function Feedbacks() {
       </div>
       {/* Single Feedback adding */}
       {filteredArray?.map((item: FeedbackProps) => {
-        return <Feedback item={item} prodReqArr={data[0].productRequests} />;
+        return (
+          <Feedback
+            key={item.id}
+            item={item}
+            prodReqArr={data[0].productRequests}
+          />
+        );
       })}
     </>
   );

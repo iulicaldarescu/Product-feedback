@@ -1,9 +1,7 @@
-import React, { Children } from "react";
-
-function FeedbackUpvotes({ children, incrementFunction, flag }) {
+function FeedbackUpvotes({ children, incrementFunction }) {
   return (
     <>
-      <button onClick={incrementFunction} disabled={flag} className="font-bold">
+      <button type="button" onClick={incrementFunction} className="font-bold">
         {children}
       </button>
     </>
