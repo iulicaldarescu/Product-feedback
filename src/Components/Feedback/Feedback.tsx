@@ -59,9 +59,7 @@ function Feedback({ item }: Props) {
           {/* right side */}
           <div className="flex items-center gap-2">
             <img className="w-6" src={commentsIcon}></img>
-            <p className="font-bold">
-              {commentLength.length + numberOfReplies}
-            </p>
+            <p className="font-bold">{commentLength.length}</p>
           </div>
         </div>
       </div>

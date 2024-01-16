@@ -6,7 +6,6 @@ import fetchData from "../../Utilities/Fetch";
 import Loading from "../Loading/Loading";
 import { Link } from "react-router-dom";
 import styles from "../../styles/Feedbacks.module.css";
-import _ from "lodash";
 import { useEffect, useState } from "react";
 
 export type FeedbackProps = {
@@ -20,16 +19,46 @@ export type FeedbackProps = {
 };
 
 function Feedbacks() {
+  const [filteredArray, setFilteredArray] = useState<any>([]);
+  const [filterValue, setFilterValue] = useState<string>("");
   //REACT QUERRY FETCH
   const { data, isLoading } = useQuery({
     queryKey: ["myData"],
     queryFn: () => fetchData(),
   });
 
+  // data array from supa
+  useEffect(() => {
+    if (data && data[0]) {
+      setFilteredArray(data[0].productRequests);
+    }
+  }, [data]);
+
+  const filterArrayFunction = (e) => {
+    setFilterValue(e.target.value);
+  };
+
+  useEffect(() => {
+    if (filterValue === "most-upvotes") {
+      const newArr = [...filteredArray].sort((a, b) => {
+        return b.upvotes - a.upvotes;
+      });
+      setFilteredArray(newArr);
+    } else if (filterValue === "most-commented") {
+      const newArr = [...filteredArray].sort((a, b) => {
+        return (b.comments?.length || 0) - (a.comments?.length || 0);
+      });
+      setFilteredArray(newArr);
+    } else if (filterValue === "filter") {
+      const newArr = [...filteredArray].sort((a, b) => a.id - b.id);
+      setFilteredArray(newArr);
+    }
+    console.log(filteredArray);
+  }, [filterValue]);
+
   if (isLoading) {
     return <Loading />;
   }
-  console.log(data[0]);
 
   return (
     <>
@@ -38,6 +67,7 @@ function Feedbacks() {
           <div>
             <label htmlFor="votes">Sort by: </label>
             <select
+              onChange={filterArrayFunction}
               id="votes"
               name="votes"
               className={`bg-blue-950 ${styles["select"]} outline-none`}
@@ -61,7 +91,7 @@ function Feedbacks() {
         </div>
       </div>
       {/* Single Feedback adding */}
-      {data[0]?.productRequests.map((item: FeedbackProps) => {
+      {filteredArray?.map((item: FeedbackProps) => {
         return <Feedback item={item} />;
       })}
     </>
