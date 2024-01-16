@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import arrowUp from "../../assets/shared/icon-arrow-up.svg";
 import commentsIcon from "../../assets/shared/icon-comments.svg";
 import { FeedbackProps } from "./Feedbacks";
 import { Link } from "react-router-dom";
 import { UsersReply } from "../../Types/ReplyTypes";
 import UsersComment from "../../Types/CommentTypes";
+import FeedbackUpvotes from "./FeedbackUpvotes";
+import supabase from "../../configSupa/supabaseConfiguration";
 
 // custom TYPESCRIPT !!!!!!!!
 export type Props = {
   item: FeedbackProps;
+  prodReqArr: any[];
 };
 
 type Reply = {
@@ -18,8 +21,8 @@ type Reply = {
   replies: UsersReply[];
 };
 
-function Feedback({ item }: Props) {
-  const [upVotes, setUpVotes] = useState<number | null>(item.upvotes);
+function Feedback({ item, prodReqArr }: Props) {
+  const [upVotes, setUpVotes] = useState<number>(item.upvotes);
 
   let commentLength = item.comments ?? [];
 
@@ -31,9 +34,21 @@ function Feedback({ item }: Props) {
     return acc + curr;
   }, 0);
 
-  const incrementUpvotes = (e: any) => {
+  const incrementUpvotes = async (e) => {
     e.preventDefault();
-    setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
+    setUpVotes((prev) => prev + 1);
+    const newArr = prodReqArr.map((itemObj: any) => {
+      return item.id === itemObj.id
+        ? { ...itemObj, upvotes: upVotes }
+        : itemObj;
+    });
+
+    console.log(newArr);
+
+    // const { error } = await supabase
+    //   .from("Product-feedback-app")
+    //   .update({ productRequests: newArr })
+    //   .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
   };
 
   return (
@@ -53,15 +68,15 @@ function Feedback({ item }: Props) {
         <div className="flex justify-between mt-3">
           {/* left side */}
           <div className=" bg-[#e6e9f6] flex py-1 px-4 rounded-xl gap-2 items-center">
-            <img className="w-3" src={arrowUp} onClick={incrementUpvotes}></img>
-            <p className="font-bold">{upVotes}</p>
+            <img className="w-3" src={arrowUp}></img>
+            <FeedbackUpvotes incrementFunction={incrementUpvotes}>
+              {upVotes}
+            </FeedbackUpvotes>
           </div>
           {/* right side */}
           <div className="flex items-center gap-2">
             <img className="w-6" src={commentsIcon}></img>
-            <p className="font-bold">
-              {commentLength.length + numberOfReplies}
-            </p>
+            <p className="font-bold">{commentLength.length}</p>
           </div>
         </div>
       </div>
