@@ -1,10 +1,12 @@
 import React, { Children } from "react";
 
-function FeedbackUpvotes({ children, incrementFunction }) {
+function FeedbackUpvotes({ children, incrementFunction, flag }) {
   return (
-    <p onClick={incrementFunction} className="font-bold">
-      {children}
-    </p>
+    <>
+      <button onClick={incrementFunction} disabled={flag} className="font-bold">
+        {children}
+      </button>
+    </>
   );
 }
 
