@@ -1,5 +1,5 @@
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
@@ -24,13 +24,14 @@ function FeedbackInfo() {
   const { state: feedbackData } = useLocation();
   console.log(feedbackData);
 
+  const { id } = useParams();
+
   const [upVotes, setUpVotes] = useState<number | null>(feedbackData.upvotes);
-
   const [isEditable, setIsEditable] = useState(false);
-
   const [title, setTitle] = useState(feedbackData.title);
   const [description, setDescription] = useState(feedbackData.description);
   const [category, setCategory] = useState(feedbackData.category);
+  const [commentInput, setCommentInput] = useState<string>("iiiiii");
 
   const incrementUpVotes = () => {
     setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
@@ -57,6 +58,8 @@ function FeedbackInfo() {
     queryKey: ["updateData"],
     queryFn: () => fetchData(),
   });
+
+  console.log(currentData);
 
   //update function title, description and category
   const updateProductRequestTitle = async ({
@@ -133,6 +136,62 @@ function FeedbackInfo() {
   const handleCategory = (e: any) => {
     setCategory(e.target.value);
   };
+
+  //function to add comment
+
+  const addComment = async (): Promise<void> => {
+    try {
+      if (isLoading) {
+        <Loading />;
+      }
+
+      const userWhoCommented = {
+        id: comments.length + 1,
+        content: commentInput,
+        user: {
+          image: currentData[0]?.currentUser?.image,
+          name: currentData[0]?.currentUser?.name,
+          username: currentData[0]?.currentUser?.username,
+        },
+      };
+
+      console.log(userWhoCommented);
+
+      const updatedProductRequests = currentData[0]?.productRequests?.map(
+        (item: any) => {
+          if (item.id === Number(id)) {
+            return {
+              ...item,
+              comments: [...(item?.comments || []), userWhoCommented],
+            };
+          }
+          return item;
+        }
+      );
+
+      console.log(updatedProductRequests);
+
+      const { data, updateError } = await supabase
+        .from(TABLE_NAME)
+        .update({ productRequests: updatedProductRequests })
+        .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+
+      console.log("comment added");
+
+      if (updateError) {
+        throw new Error("Error updating data");
+      }
+
+      return data;
+    } catch (error) {
+      console.error("Error updating data:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    console.log(commentInput);
+  }, [commentInput]);
 
   return (
     <div className="p-4 mx-2 flex flex-col gap-6">
@@ -232,7 +291,7 @@ function FeedbackInfo() {
         })}
       </div>
       <div>
-        <AddComment />
+        <AddComment addComment={addComment} setCommentInput={setCommentInput} />
       </div>
     </div>
   );

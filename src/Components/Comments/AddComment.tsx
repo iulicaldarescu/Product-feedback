@@ -1,14 +1,17 @@
 import { useState } from "react";
 import AddFeedback from "../AddingButton";
 
-function AddComment() {
-  const [commentInput, setCommentInput] = useState<string>("");
+function AddComment({ addComment, setCommentInput }) {
   const [commentCharactersLeft, setCommentCharactersLeft] =
     useState<number>(250);
 
   const handleChange = (e: any) => {
     const remainingChars = Math.max(0, 250 - e.target.value.length);
     setCommentCharactersLeft(remainingChars);
+  };
+
+  const handleInput = (e: any) => {
+    setCommentInput(e.target.value);
   };
 
   return (
@@ -20,7 +23,9 @@ function AddComment() {
         </label>
 
         <textarea
-          onChange={handleChange}
+          onChange={(e) => {
+            handleChange(e), handleInput(e);
+          }}
           id="commentInput"
           className="bg-[#ededed] w-full h-24 p-3 outline-none rounded-lg"
           placeholder="Type your comment here"
@@ -32,7 +37,9 @@ function AddComment() {
         <p>{commentCharactersLeft}</p>
 
         <div className="text-white bg-purple-800 rounded-lg">
-          <AddFeedback>Add Comment</AddFeedback>
+          <AddFeedback onClickProp={() => addComment()}>
+            Add Comment
+          </AddFeedback>
         </div>
       </div>
     </div>
