@@ -12,6 +12,7 @@ import supabase from "../../configSupa/supabaseConfiguration";
 export type Props = {
   item: FeedbackProps;
   prodReqArr: any[];
+  rowUser: string;
 };
 
 type Reply = {
@@ -21,7 +22,7 @@ type Reply = {
   replies: UsersReply[];
 };
 
-function Feedback({ item, prodReqArr }: Props) {
+function Feedback({ item, prodReqArr, rowUser }: Props) {
   const [upVotes, setUpVotes] = useState<number>(item.upvotes);
   const [isUpvoteClicked, setIsUpvoteClicked] = useState(false);
 
@@ -35,35 +36,38 @@ function Feedback({ item, prodReqArr }: Props) {
   //   return acc + curr;
   // }, 0);
 
-  const incrementUpvotes = async (e) => {
+  const incrementUpvotes = async (e: any) => {
     e.preventDefault();
 
-    if (isUpvoteClicked) {
+    if (item.usersUpvoted.includes(rowUser) || isUpvoteClicked) {
+      console.log("Already voted");
+      // eventually decrease upvote
       return;
-    }
-
-    if (!isUpvoteClicked) {
+    } else if (!item.usersUpvoted.includes(rowUser) || !isUpvoteClicked) {
       setUpVotes((prev) => prev + 1);
+
+      let newArr = prodReqArr.map((itemObj: any) => {
+        return item.id === itemObj.id
+          ? {
+              ...itemObj,
+              upvotes: item.id === itemObj.id ? upVotes + 1 : itemObj.upvotes,
+            }
+          : itemObj;
+      });
+
+      newArr = newArr.map((itemObj) => {
+        return item.id === itemObj.id
+          ? { ...itemObj, usersUpvoted: [...itemObj.usersUpvoted, rowUser] }
+          : itemObj;
+      });
+
+      const { error } = await supabase
+        .from("Product-feedback-app")
+        .update({ productRequests: newArr })
+        .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+
+      setIsUpvoteClicked(true);
     }
-
-    const newArr = prodReqArr.map((itemObj: any) => {
-      return item.id === itemObj.id
-        ? {
-            ...itemObj,
-            upvotes: item.id === itemObj.id ? upVotes + 1 : itemObj.upvotes,
-          }
-        : itemObj;
-    });
-
-    console.log(newArr);
-    console.log(isUpvoteClicked);
-
-    const { error } = await supabase
-      .from("Product-feedback-app")
-      .update({ productRequests: newArr })
-      .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
-
-    setIsUpvoteClicked(true);
   };
 
   return (

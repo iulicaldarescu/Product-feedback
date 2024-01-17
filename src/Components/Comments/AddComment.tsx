@@ -1,7 +1,7 @@
 import { useState } from "react";
 import AddFeedback from "../AddingButton";
 
-function AddComment({ addComment, setCommentInput }) {
+function AddComment({ addComment, setCommentInput }: any) {
   const [commentCharactersLeft, setCommentCharactersLeft] =
     useState<number>(250);
 

@@ -5,9 +5,11 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./App.css";
 import Feedbacks from "./Components/Feedback/Feedbacks";
 import FeedbackInfo from "./pages/FeedbackInfo";
+import { useState } from "react";
 
 function App() {
   const queryClient = new QueryClient();
+  const [filterValue, setFilterValue] = useState<string>("filter");
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -16,7 +18,14 @@ function App() {
           path="/"
           element={
             <>
-              <Header /> <Feedbacks />
+              <Header
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+              />{" "}
+              <Feedbacks
+                filterValue={filterValue}
+                setFilterValue={setFilterValue}
+              />
             </>
           }
         ></Route>
