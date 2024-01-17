@@ -7,6 +7,7 @@ import Loading from "../Loading/Loading";
 import { Link } from "react-router-dom";
 import styles from "../../styles/Feedbacks.module.css";
 import { useEffect, useState } from "react";
+import { filter } from "lodash";
 
 export type FeedbackProps = {
   category: string;
@@ -16,11 +17,11 @@ export type FeedbackProps = {
   title: string;
   upvotes: number;
   comments: any;
+  usersUpvoted: string[];
 };
 
-function Feedbacks() {
+function Feedbacks({ filterValue, setFilterValue }: any) {
   const [filteredArray, setFilteredArray] = useState<any>([]);
-  const [filterValue, setFilterValue] = useState<string>("");
 
   //REACT QUERRY FETCH
   const { data, isLoading } = useQuery({
@@ -35,7 +36,7 @@ function Feedbacks() {
     }
   }, [data]);
 
-  const filterArrayFunction = (e) => {
+  const filterArrayFunction = (e: any) => {
     setFilterValue(e.target.value);
   };
 
@@ -53,8 +54,37 @@ function Feedbacks() {
     } else if (filterValue === "filter") {
       const newArr = [...filteredArray].sort((a, b) => a.id - b.id);
       setFilteredArray(newArr);
+    } else if (filterValue === "bug") {
+      const newArr = [...data[0].productRequests].filter((item) => {
+        return item.category === filterValue;
+      });
+      setFilteredArray(newArr);
+    } else if (filterValue === "feature") {
+      const newArr = [...data[0].productRequests].filter((item) => {
+        return item.category === filterValue;
+      });
+      setFilteredArray(newArr);
+    } else if (filterValue === "enhancement") {
+      const newArr = [...data[0].productRequests].filter((item) => {
+        return item.category === filterValue;
+      });
+      setFilteredArray(newArr);
+    } else if (filterValue === "ux") {
+      const newArr = [...data[0].productRequests].filter((item) => {
+        return item.category === filterValue;
+      });
+      setFilteredArray(newArr);
+    } else if (filterValue === "ui") {
+      const newArr = [...data[0].productRequests].filter((item) => {
+        return item.category === filterValue;
+      });
+      setFilteredArray(newArr);
+    } else if (filterValue === "all") {
+      const newArr = [...data[0].productRequests].filter((item) => {
+        return item;
+      });
+      setFilteredArray(newArr);
     }
-    console.log(filteredArray);
   }, [filterValue]);
 
   if (isLoading) {
@@ -98,6 +128,7 @@ function Feedbacks() {
             key={item.id}
             item={item}
             prodReqArr={data[0].productRequests}
+            rowUser={data[0].currentUser.username}
           />
         );
       })}

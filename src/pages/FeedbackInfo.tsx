@@ -1,5 +1,5 @@
 import { useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import arrowUp from "../assets/shared/icon-arrow-up.svg";
@@ -8,7 +8,6 @@ import commentsIcon from "../assets/shared/icon-comments.svg";
 import CommentContainer from "../Components/Comments/CommentContainer";
 import AddComment from "../Components/Comments/AddComment";
 import CommentType from "../Types/CommentTypes";
-
 import AddFeedback from "../Components/AddingButton";
 import styles from "../styles/FeedbackInfo.module.css";
 import supabase from "../configSupa/supabaseConfiguration";
@@ -19,22 +18,17 @@ import {
   updateProductRequest,
 } from "../Types/FeedbackInfoTypes";
 import { TABLE_NAME } from "../Utilities/CommonVariables";
+import FeedbackUpvotes from "../Components/Feedback/FeedbackUpvotes";
 
 function FeedbackInfo() {
+  console.log("BA");
   const { state: feedbackData } = useLocation();
-  console.log(feedbackData);
-
-  const [upVotes, setUpVotes] = useState<number | null>(feedbackData.upvotes);
-
+  const [upVotes, setUpVotes] = useState<number>(feedbackData.upvotes);
   const [isEditable, setIsEditable] = useState(false);
-
   const [title, setTitle] = useState(feedbackData.title);
   const [description, setDescription] = useState(feedbackData.description);
   const [category, setCategory] = useState(feedbackData.category);
-
-  const incrementUpVotes = () => {
-    setUpVotes((prev) => (prev !== null ? prev + 1 : 1));
-  };
+  const [isUpvoteClicked, setIsUpvoteClicked] = useState(false);
 
   //comments
   const comments = feedbackData.comments ?? []; //verifica null sau undefined
@@ -57,6 +51,90 @@ function FeedbackInfo() {
     queryKey: ["updateData"],
     queryFn: () => fetchData(),
   });
+
+  // Upvotes Logics
+  // -----------------------------------------------------------------------------------------------
+
+  // const incrementUpvotes = async (e: any) => {
+  //   e.preventDefault();
+  //   const rowUser: string = currentData[0].currentUser.username;
+  //   const prodReqArr = currentData[0].productRequests;
+
+  //   if (feedbackData.usersUpvoted.includes(rowUser)) {
+  //     return;
+  //     // eventually decrease upvote
+  //   } else {
+  //     if (!isUpvoteClicked) {
+  //       setUpVotes((prev) => prev + 1);
+  //       console.log(upVotes);
+  //     }
+
+  //     let newArr = prodReqArr.map((itemObj: any) => {
+  //       return feedbackData.id === itemObj.id
+  //         ? {
+  //             ...itemObj,
+  //             upvotes:
+  //               feedbackData.id === itemObj.id ? upVotes + 1 : itemObj.upvotes,
+  //           }
+  //         : itemObj;
+  //     });
+
+  //     newArr = newArr.map((itemObj: any) => {
+  //       return currentData[0].productRequests.id === itemObj.id
+  //         ? { ...itemObj, usersUpvoted: [...itemObj.usersUpvoted, rowUser] }
+  //         : itemObj;
+  //     });
+  //     console.log(newArr);
+
+  //     const { error } = await supabase
+  //       .from("Product-feedback-app")
+  //       .update({ productRequests: newArr })
+  //       .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+
+  //     if (error) {
+  //       console.error("Error updating upvotes:", error);
+  //       // Handle error appropriately
+  //     } else {
+  //       setIsUpvoteClicked(true);
+  //     }
+  //   }
+  // };
+
+  const incrementUpvotes = async (e: any) => {
+    const rowUser: string = currentData[0].currentUser.username;
+    if (feedbackData.usersUpvoted.includes(rowUser) || isUpvoteClicked) {
+      return;
+    } else if (
+      !feedbackData.usersUpvoted.includes(rowUser) ||
+      !isUpvoteClicked
+    ) {
+      setUpVotes((prev) => prev + 1);
+
+      let newArr = currentData[0].productRequests.map((itemObj: any) => {
+        return feedbackData.id === itemObj.id
+          ? {
+              ...itemObj,
+              upvotes:
+                feedbackData.id === itemObj.id ? upVotes + 1 : itemObj.upvotes,
+            }
+          : itemObj;
+      });
+
+      newArr = newArr.map((itemObj: any) => {
+        return feedbackData.id === itemObj.id
+          ? { ...itemObj, usersUpvoted: [...itemObj.usersUpvoted, rowUser] }
+          : itemObj;
+      });
+
+      const { error } = await supabase
+        .from("Product-feedback-app")
+        .update({ productRequests: newArr })
+        .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+    }
+    setIsUpvoteClicked(true);
+  };
+
+  // -----------------------------------------------------------------------------------------------
 
   //update function title, description and category
   const updateProductRequestTitle = async ({
@@ -206,8 +284,10 @@ function FeedbackInfo() {
         <div className="flex justify-between mt-3">
           {/* left side */}
           <div className=" bg-[#e6e9f6] flex py-1 px-4 rounded-xl gap-2 items-center">
-            <img onClick={incrementUpVotes} className="w-3" src={arrowUp}></img>
-            <p className="font-bold">{upVotes}</p>
+            <img className="w-3" src={arrowUp}></img>
+            <FeedbackUpvotes incrementFunction={incrementUpvotes}>
+              <p className="font-bold">{upVotes}</p>
+            </FeedbackUpvotes>
           </div>
           {/* right side */}
           <div className="flex items-center gap-2">

@@ -3,7 +3,7 @@ import hamburgerMenu from "../assets/shared/mobile/icon-hamburger.svg";
 import closeMenu from "../assets/shared/mobile/icon-close.svg";
 import { useReducer } from "react";
 
-function Header() {
+function Header({ filterValue, setFilterValue }: any) {
   // for the useReducer hook
 
   //  1. importam hookul useReducer
@@ -35,6 +35,12 @@ function Header() {
   const closeModal = () => {
     // Trigger the slide-out animation by adding a class
     dispatch({ type: "CLOSE_MODAL" });
+  };
+
+  // filtering function
+  const handleClickFilter = (e: any) => {
+    setFilterValue(e.target.id);
+    closeModal();
   };
 
   return (
@@ -74,12 +80,24 @@ function Header() {
             <div
               className={`flex flex-wrap gap-4 ${styles["custom-filter-childs"]} bg-white p-2 font-semibold text-sm rounded-lg`}
             >
-              <p>All</p>
-              <p>UI</p>
-              <p>UX</p>
-              <p>Enhancement</p>
-              <p>Bug</p>
-              <p>Feature</p>
+              <p id="all" onClick={handleClickFilter}>
+                All
+              </p>
+              <p id="ui" onClick={handleClickFilter}>
+                UI
+              </p>
+              <p id="ux" onClick={handleClickFilter}>
+                UX
+              </p>
+              <p id="enhancement" onClick={handleClickFilter}>
+                Enhancement
+              </p>
+              <p id="bug" onClick={handleClickFilter}>
+                Bug
+              </p>
+              <p id="feature" onClick={handleClickFilter}>
+                Feature
+              </p>
             </div>
             {/* left block with roadmap etc */}
             <div className="bg-white rounded-lg py-2 px-4">
