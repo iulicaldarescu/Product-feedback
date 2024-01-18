@@ -232,11 +232,13 @@ function FeedbackInfo() {
       <div className="flex justify-between">
         {/* left side */}
 
-        <Link className="flex items-center gap-2" to="/">
-          <img src={arrowLeft}></img>
+        {
+          <Link className="flex items-center gap-2" to="/">
+            <img src={arrowLeft}></img>
 
-          <p className="text-gray-500">Go Back</p>
-        </Link>
+            <p className="text-gray-500">Go Back</p>
+          </Link>
+        }
 
         {/* right side */}
         <div className="text-white cursor-pointer">

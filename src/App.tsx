@@ -9,7 +9,7 @@ import { useState } from "react";
 
 function App() {
   const queryClient = new QueryClient();
-  const [filterValue, setFilterValue] = useState<string>("filter");
+  const [filterValue, setFilterValue] = useState<string>("all");
 
   return (
     <QueryClientProvider client={queryClient}>

@@ -32,14 +32,15 @@ function Feedbacks({ filterValue, setFilterValue }: any) {
   useEffect(() => {
     if (data && data[0]) {
       setFilteredArray(data[0].productRequests);
+      filterFeedbackData();
     }
-  }, [data]);
+  }, [data, filterValue]);
 
   const filterArrayFunction = (e: any) => {
     setFilterValue(e.target.value);
   };
 
-  useEffect(() => {
+  function filterFeedbackData() {
     if (filterValue === "most-upvotes") {
       const newArr = [...filteredArray].sort((a, b) => {
         return b.upvotes - a.upvotes;
@@ -53,38 +54,19 @@ function Feedbacks({ filterValue, setFilterValue }: any) {
     } else if (filterValue === "filter") {
       const newArr = [...filteredArray].sort((a, b) => a.id - b.id);
       setFilteredArray(newArr);
-    } else if (filterValue === "bug") {
-      const newArr = [...data[0].productRequests].filter((item) => {
+    } else if (
+      filterValue === "bug" ||
+      filterValue === "feature" ||
+      filterValue === "enhancement" ||
+      filterValue === "ui" ||
+      filterValue === "ux"
+    ) {
+      const newArr = [...(data[0]?.productRequests || [])].filter((item) => {
         return item.category === filterValue;
-      });
-      setFilteredArray(newArr);
-    } else if (filterValue === "feature") {
-      const newArr = [...data[0]?.productRequests].filter((item) => {
-        return item.category === filterValue;
-      });
-      setFilteredArray(newArr);
-    } else if (filterValue === "enhancement") {
-      const newArr = [...data[0]?.productRequests].filter((item) => {
-        return item.category === filterValue;
-      });
-      setFilteredArray(newArr);
-    } else if (filterValue === "ux") {
-      const newArr = [...data[0]?.productRequests].filter((item) => {
-        return item.category === filterValue;
-      });
-      setFilteredArray(newArr);
-    } else if (filterValue === "ui") {
-      const newArr = [...data[0]?.productRequests].filter((item) => {
-        return item.category === filterValue;
-      });
-      setFilteredArray(newArr);
-    } else if (filterValue === "all") {
-      const newArr = [...(data[0]?.productRequests || [])].map((item) => {
-        return item;
       });
       setFilteredArray(newArr);
     }
-  }, [filterValue]);
+  }
 
   if (isLoading) {
     return <Loading />;
