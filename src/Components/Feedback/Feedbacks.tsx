@@ -74,8 +74,11 @@ function Feedbacks({ filterValue, setFilterValue }: any) {
 
   return (
     <>
-      <div className="flex  justify-between items-center bg-blue-950 text-white p-5">
+      <div className="flex  justify-between items-center bg-blue-950 text-white p-5 sm:mx-5 sm:rounded-lg">
         <div className="flex  items-center">
+          <div className="hidden sm:flex">
+            <p>Suggestions</p>
+          </div>
           <div>
             <label htmlFor="votes">Sort by: </label>
             <select

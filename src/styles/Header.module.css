@@ -1,12 +1,19 @@
-.mobile-size-backgroud {
+.mobile-size-background {
   background-image: url("../assets/suggestions/mobile/background-header.png");
 }
 
-.custom-filter-childs > * {
-  padding: 0.2rem 1rem;
-  background-color: blue;
-  color: white;
-  border-radius: 0.5rem;
+.tablet-size-background {
+  background-image: url("../assets/suggestions/tablet/background-header.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.desktop-size-background {
+  background-image: url("../assets/suggestions/desktop/background-header.png");
+}
+
+.bg-cover {
+  background-size: cover;
 }
 
 @keyframes slideIn {
