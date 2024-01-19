@@ -1,5 +1,7 @@
 .mobile-size-background {
   background-image: url("../assets/suggestions/mobile/background-header.png");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .tablet-size-background {

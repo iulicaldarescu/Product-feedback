@@ -11,6 +11,7 @@ function Header({ setFilterValue }: any) {
   const [liveCounter, setLiveCounter] = useState(null);
   const [suggestion, setSuggestion] = useState(null);
   const [planned, setPlanned] = useState(null);
+  const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
 
   // for the useReducer hook
 
@@ -82,100 +83,122 @@ function Header({ setFilterValue }: any) {
     }
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     //header built - background is changing depending the screen size
-    <>
-      <div
-        className={` flex justify-between items-center px-5 py-2 sm:grid sm:grid-cols-3 sm:justify-between sm:gap-6 sm-h-36`}
-      >
-        {/* de continuat aici */}
+    <div>
+      <div>
         <div
-          className={`flex flex-col text-white sm:h-40 sm:basis-1/3 sm:${styles["tablet-size-background"]} sm:justify-end pb-6 px-4 h-full`}
+          className={`flex justify-between items-center px-5 py-2 sm:grid sm:grid-cols-3 sm:justify-between sm:gap-6 sm-h-36 ${
+            window.innerWidth < 640
+              ? styles["mobile-size-background"]
+              : "bg-none"
+          }`}
         >
-          <p className="font-bold text-lg">Frontend Mentor</p>
-          <p>Feedback Board</p>
-        </div>
+          {/* de continuat aici */}
+          <div
+            className={`flex flex-col text-white sm:h-40 sm:basis-1/3 ${
+              window.innerWidth > 640
+                ? styles["tablet-size-background"]
+                : "bg-none"
+            }  sm:justify-end pb-6 px-4 h-full rounded-lg`}
+          >
+            <p className="font-bold text-lg">Frontend Mentor</p>
+            <p>Feedback Board</p>
+          </div>
 
-        <div onClick={openModal} className="sm:hidden">
-          <img src={hamburgerMenu}></img>
-        </div>
+          <div onClick={openModal} className="sm:hidden">
+            <img src={hamburgerMenu}></img>
+          </div>
 
-        {/* categories */}
-        <div className="hidden sm:block sm:bg-white h-full">
-          <div className="">
-            <div className="sm:flex sm:basis-1/3 justify-center items-center">
-              <div
-                className={`flex flex-wrap sm:gap-2 sm:p-2 sm:font-semibold sm:text-sm sm:rounded-lg sm:justify-start `}
-              >
-                <div className="flex bg-blue-400 items-center p-2 rounded-lg">
-                  <p id="all" onClick={handleClickFilter} className="">
-                    All
-                  </p>
-                </div>
+          {/* categories */}
+          <div className="hidden sm:block sm:bg-white h-full rounded-lg">
+            <div className="">
+              <div className="sm:flex sm:basis-1/3 justify-center items-center">
+                <div
+                  className={`flex flex-wrap sm:gap-2 sm:p-2 sm:font-semibold sm:text-sm sm:rounded-lg sm:justify-start `}
+                >
+                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                    <p id="all" onClick={handleClickFilter} className="">
+                      All
+                    </p>
+                  </div>
 
-                <div className="flex bg-blue-400 items-center p-2 rounded-lg">
-                  <p id="ui" onClick={handleClickFilter}>
-                    UI
-                  </p>
-                </div>
+                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                    <p id="ui" onClick={handleClickFilter}>
+                      UI
+                    </p>
+                  </div>
 
-                <div className="flex bg-blue-400 items-center p-2 rounded-lg">
-                  <p id="ux" onClick={handleClickFilter}>
-                    UX
-                  </p>
-                </div>
-                <div className="flex bg-blue-400 items-center p-2 rounded-lg">
-                  <p id="enhancement" onClick={handleClickFilter}>
-                    Enhancement
-                  </p>
-                </div>
-                <div className="flex bg-blue-400 items-center p-2 rounded-lg">
-                  <p id="bug" onClick={handleClickFilter}>
-                    Bug
-                  </p>
-                </div>
-                <div className="flex bg-blue-400 items-center p-2 rounded-lg">
-                  <p id="feature" onClick={handleClickFilter}>
-                    Feature
-                  </p>
+                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                    <p id="ux" onClick={handleClickFilter}>
+                      UX
+                    </p>
+                  </div>
+                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                    <p id="enhancement" onClick={handleClickFilter}>
+                      Enhancement
+                    </p>
+                  </div>
+                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                    <p id="bug" onClick={handleClickFilter}>
+                      Bug
+                    </p>
+                  </div>
+                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                    <p id="feature" onClick={handleClickFilter}>
+                      Feature
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        {/* roadmap */}
+          {/* roadmap */}
 
-        <div className="hidden sm:block sm:bg-white sm:rounded-lg sm:py-2 sm:px-4 sm:basis-1/3 h-full">
-          <div className="flex justify-between pb-5 items-center">
-            <p className="text-black font-bold">Roadmap</p>
-            <p className="underline text-blue-600 text-sm">View</p>
-          </div>
-
-          <div className="flex flex-col list-disc list-inside">
-            <div className="flex justify-between">
-              <p>
-                {" "}
-                <span className="text-yellow-400 pr-1">&#8226;</span> Planned
-              </p>
-              <p>2</p>
+          <div className="hidden sm:block sm:bg-white sm:rounded-lg sm:py-2 sm:px-4 sm:basis-1/3 h-full">
+            <div className="flex justify-between pb-5 items-center">
+              <p className="text-black font-bold">Roadmap</p>
+              <p className="underline text-blue-600 text-sm">View</p>
             </div>
 
-            <div className="flex justify-between">
-              <p>
-                {" "}
-                <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
-                In-Progress
-              </p>
-              <p>3</p>
-            </div>
+            <div className="flex flex-col list-disc list-inside">
+              <div className="flex justify-between">
+                <p>
+                  {" "}
+                  <span className="text-yellow-400 pr-1">&#8226;</span> Planned
+                </p>
+                <p>2</p>
+              </div>
 
-            <div className="flex justify-between">
-              <p>
-                {" "}
-                <span className="text-yellow-400 pr-1">&#8226;</span> Live
-              </p>
-              <p>1</p>
+              <div className="flex justify-between">
+                <p>
+                  {" "}
+                  <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
+                  In-Progress
+                </p>
+                <p>3</p>
+              </div>
+
+              <div className="flex justify-between">
+                <p>
+                  {" "}
+                  <span className="text-yellow-400 pr-1">&#8226;</span> Live
+                </p>
+                <p>1</p>
+              </div>
             </div>
           </div>
         </div>
@@ -267,7 +290,7 @@ function Header({ setFilterValue }: any) {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

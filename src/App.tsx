@@ -12,34 +12,36 @@ function App() {
   const [filterValue, setFilterValue] = useState<string>("all");
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Header
-                filterValue={filterValue}
-                setFilterValue={setFilterValue}
-              />{" "}
-              <Feedbacks
-                filterValue={filterValue}
-                setFilterValue={setFilterValue}
-              />
-            </>
-          }
-        ></Route>
-        <Route path="/feedback/:id" element={<FeedbackInfo />}></Route>
-        <Route
-          path="/new-feedback"
-          element={
-            <>
-              <NewFeedback />
-            </>
-          }
-        ></Route>
-      </Routes>
-    </QueryClientProvider>
+    <div className="md:px-16 lg:px-32 xl:px-56 2xl:px-72">
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
+                <Header
+                  filterValue={filterValue}
+                  setFilterValue={setFilterValue}
+                />{" "}
+                <Feedbacks
+                  filterValue={filterValue}
+                  setFilterValue={setFilterValue}
+                />
+              </>
+            }
+          ></Route>
+          <Route path="/feedback/:id" element={<FeedbackInfo />}></Route>
+          <Route
+            path="/new-feedback"
+            element={
+              <>
+                <NewFeedback />
+              </>
+            }
+          ></Route>
+        </Routes>
+      </QueryClientProvider>
+    </div>
   );
 }
 
