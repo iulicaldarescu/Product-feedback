@@ -1,9 +1,17 @@
 import styles from "../styles/Header.module.css";
 import hamburgerMenu from "../assets/shared/mobile/icon-hamburger.svg";
 import closeMenu from "../assets/shared/mobile/icon-close.svg";
-import { useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import fetchData from "../Utilities/Fetch";
+import Loading from "./Loading/Loading";
 
-function Header({ filterValue, setFilterValue }: any) {
+function Header({ setFilterValue }: any) {
+  const [inProgressCounter, setInProgressCounter] = useState(null);
+  const [liveCounter, setLiveCounter] = useState(null);
+  const [suggestion, setSuggestion] = useState(null);
+  const [planned, setPlanned] = useState(null);
+
   // for the useReducer hook
 
   //  1. importam hookul useReducer
@@ -44,6 +52,36 @@ function Header({ filterValue, setFilterValue }: any) {
   };
 
   // ${styles["tablet-size-background"]}
+
+  const { data } = useQuery({
+    queryKey: ["myData"],
+    queryFn: () => fetchData(),
+  });
+
+  useEffect(() => {
+    if (data) {
+      const inProgressNumber = data[0]?.productRequests?.filter((item: any) => {
+        return item.status === "in-progress";
+      });
+      setInProgressCounter(inProgressNumber.length);
+
+      const liveNumber = data[0]?.productRequests?.filter((item: any) => {
+        return item.status === "live";
+      });
+      setLiveCounter(liveNumber.length);
+
+      const suggestionNumber = data[0].productRequests.filter((item: any) => {
+        return item.status === "suggestion";
+      });
+      setSuggestion(suggestionNumber.length);
+
+      const plannedNumber = data[0].productRequests.filter((item: any) => {
+        return item.status === "planned";
+      });
+      setPlanned(plannedNumber.length);
+    }
+  }, []);
+
   return (
     //header built - background is changing depending the screen size
     <>
@@ -197,7 +235,7 @@ function Header({ filterValue, setFilterValue }: any) {
                     <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
                     Planned
                   </p>
-                  <p>2</p>
+                  <p>{planned}</p>
                 </div>
 
                 <div className="flex justify-between">
@@ -206,7 +244,7 @@ function Header({ filterValue, setFilterValue }: any) {
                     <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
                     In-Progress
                   </p>
-                  <p>3</p>
+                  <p>{inProgressCounter}</p>
                 </div>
 
                 <div className="flex justify-between">
@@ -214,7 +252,15 @@ function Header({ filterValue, setFilterValue }: any) {
                     {" "}
                     <span className="text-yellow-400 pr-1">&#8226;</span> Live
                   </p>
-                  <p>1</p>
+                  <p>{liveCounter}</p>
+                </div>
+                <div className="flex justify-between">
+                  <p>
+                    {" "}
+                    <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
+                    Suggestion
+                  </p>
+                  <p>{suggestion}</p>
                 </div>
               </div>
             </div>
