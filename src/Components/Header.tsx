@@ -12,6 +12,7 @@ function Header({ setFilterValue }: any) {
   const [suggestion, setSuggestion] = useState(null);
   const [planned, setPlanned] = useState(null);
   const [screenWidth, setScreenWidth] = useState<number>(window.innerWidth);
+  const [selectedFilter, setSelectedFilter] = useState<string>("");
 
   // for the useReducer hook
 
@@ -50,6 +51,9 @@ function Header({ setFilterValue }: any) {
   const handleClickFilter = (e: any) => {
     setFilterValue(e.target.id);
     closeModal();
+
+    // color change
+    setSelectedFilter(e.target.innerText);
   };
 
   // ${styles["tablet-size-background"]}
@@ -129,34 +133,62 @@ function Header({ setFilterValue }: any) {
                 <div
                   className={`flex flex-wrap sm:gap-2 sm:p-2 sm:font-semibold sm:text-sm sm:rounded-lg sm:justify-start `}
                 >
-                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                  <div
+                    className={`${
+                      selectedFilter === "All" ? "bg-blue-600" : "bg-blue-100"
+                    } flex  items-center p-2 rounded-lg cursor-pointer`}
+                  >
                     <p id="all" onClick={handleClickFilter} className="">
                       All
                     </p>
                   </div>
 
-                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                  <div
+                    className={`${
+                      selectedFilter === "UI" ? "bg-blue-600" : "bg-blue-100"
+                    } flex  items-center p-2 rounded-lg cursor-pointer`}
+                  >
                     <p id="ui" onClick={handleClickFilter}>
                       UI
                     </p>
                   </div>
 
-                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                  <div
+                    className={`${
+                      selectedFilter === "UX" ? "bg-blue-600" : "bg-blue-100"
+                    } flex  items-center p-2 rounded-lg cursor-pointer`}
+                  >
                     <p id="ux" onClick={handleClickFilter}>
                       UX
                     </p>
                   </div>
-                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                  <div
+                    className={`${
+                      selectedFilter === "Enhancement"
+                        ? "bg-blue-600"
+                        : "bg-blue-100"
+                    } flex  items-center p-2 rounded-lg cursor-pointer`}
+                  >
                     <p id="enhancement" onClick={handleClickFilter}>
                       Enhancement
                     </p>
                   </div>
-                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                  <div
+                    className={`${
+                      selectedFilter === "Bug" ? "bg-blue-600" : "bg-blue-100"
+                    } flex  items-center p-2 rounded-lg cursor-pointer`}
+                  >
                     <p id="bug" onClick={handleClickFilter}>
                       Bug
                     </p>
                   </div>
-                  <div className="flex bg-blue-400 items-center p-2 rounded-lg">
+                  <div
+                    className={`${
+                      selectedFilter === "Feature"
+                        ? "bg-blue-600"
+                        : "bg-blue-100"
+                    } flex  items-center p-2 rounded-lg cursor-pointer`}
+                  >
                     <p id="feature" onClick={handleClickFilter}>
                       Feature
                     </p>
@@ -171,33 +203,46 @@ function Header({ setFilterValue }: any) {
           <div className="hidden sm:block sm:bg-white sm:rounded-lg sm:py-2 sm:px-4 sm:basis-1/3 h-full">
             <div className="flex justify-between pb-5 items-center">
               <p className="text-black font-bold">Roadmap</p>
-              <p className="underline text-blue-600 text-sm">View</p>
+              <p className="underline text-blue-600 text-sm font-semibold">
+                View
+              </p>
             </div>
 
-            <div className="flex flex-col list-disc list-inside">
-              <div className="flex justify-between">
-                <p>
-                  {" "}
-                  <span className="text-yellow-400 pr-1">&#8226;</span> Planned
-                </p>
-                <p>2</p>
+            {/* Planned */}
+            <div className="flex flex-col list-disc list-inside font-semibold text-gray-500">
+              <div className="flex justify-between item-center">
+                <div className="flex items-center gap-4">
+                  <div className="w-3 h-3 bg-[#f49e85] rounded-full"></div>
+                  <p>Planned</p>
+                </div>
+                <p>{planned}</p>
               </div>
 
-              <div className="flex justify-between">
-                <p>
-                  {" "}
-                  <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
-                  In-Progress
-                </p>
-                <p>3</p>
+              {/* In-progress */}
+              <div className="flex justify-between item-center">
+                <div className="flex items-center gap-4">
+                  <div className="w-3 h-3 bg-[#ae1feb] rounded-full"></div>
+                  <p>In-progress</p>
+                </div>
+                <p>{inProgressCounter}</p>
               </div>
 
-              <div className="flex justify-between">
-                <p>
-                  {" "}
-                  <span className="text-yellow-400 pr-1">&#8226;</span> Live
-                </p>
-                <p>1</p>
+              {/* Live */}
+              <div className="flex justify-between item-center">
+                <div className="flex items-center gap-4">
+                  <div className="w-3 h-3 bg-[#62bdf9] rounded-full"></div>
+                  <p>Live</p>
+                </div>
+                <p>{liveCounter}</p>
+              </div>
+
+              {/* Suggestion */}
+              <div className="flex justify-between item-center">
+                <div className="flex items-center gap-4">
+                  <div className="w-3 h-3 bg-[#36ff61] rounded-full"></div>
+                  <p>Suggestion</p>
+                </div>
+                <p>{suggestion}</p>
               </div>
             </div>
           </div>
@@ -208,7 +253,7 @@ function Header({ setFilterValue }: any) {
 
       {isModalMenuOpen && (
         <div
-          className={`absolute bg-violet-300 top-0 right-0 left-40 h-screen ${
+          className={`absolute bg-[#90a0e6] px-3 top-0 right-0 left-40 h-screen ${
             isModalMenuOpen
               ? styles["animate-slide-in"]
               : styles["animate-slide-out"]
@@ -216,73 +261,117 @@ function Header({ setFilterValue }: any) {
         >
           {/* //close button */}
           <button onClick={closeModal}>
-            <img src={closeMenu} className={`pl-5 py-3 `}></img>
+            <img src={closeMenu} className={`pl-1 py-3 `}></img>
           </button>
 
           {/* container that holds the 2 blocks of menu like in the photo */}
           <div className="flex flex-col px-1 gap-3">
             {/* left block with all the filters */}
             <div
-              className={`flex flex-wrap gap-4 ${styles["custom-filter-childs"]} bg-white p-2 font-semibold text-sm rounded-lg`}
+              className={`flex gap-1 flex-wrap sm:gap-2 sm:p-2 sm:font-semibold sm:text-sm sm:rounded-lg sm:justify-start `}
             >
-              <p id="all" onClick={handleClickFilter}>
-                All
-              </p>
-              <p id="ui" onClick={handleClickFilter}>
-                UI
-              </p>
-              <p id="ux" onClick={handleClickFilter}>
-                UX
-              </p>
-              <p id="enhancement" onClick={handleClickFilter}>
-                Enhancement
-              </p>
-              <p id="bug" onClick={handleClickFilter}>
-                Bug
-              </p>
-              <p id="feature" onClick={handleClickFilter}>
-                Feature
-              </p>
+              <div
+                className={`${
+                  selectedFilter === "All" ? "bg-blue-600" : "bg-blue-200"
+                } flex  items-center p-1 rounded-lg cursor-pointer`}
+              >
+                <p id="all" onClick={handleClickFilter} className="">
+                  All
+                </p>
+              </div>
+
+              <div
+                className={`${
+                  selectedFilter === "UI" ? "bg-blue-600" : "bg-blue-200"
+                } flex  items-center p-1 rounded-lg cursor-pointer`}
+              >
+                <p id="ui" onClick={handleClickFilter}>
+                  UI
+                </p>
+              </div>
+
+              <div
+                className={`${
+                  selectedFilter === "UX" ? "bg-blue-600" : "bg-blue-200"
+                } flex  items-center p-1 rounded-lg cursor-pointer`}
+              >
+                <p id="ux" onClick={handleClickFilter}>
+                  UX
+                </p>
+              </div>
+              <div
+                className={`${
+                  selectedFilter === "Enhancement"
+                    ? "bg-blue-600"
+                    : "bg-blue-200"
+                } flex  items-center p-1 rounded-lg cursor-pointer`}
+              >
+                <p id="enhancement" onClick={handleClickFilter}>
+                  Enhancement
+                </p>
+              </div>
+              <div
+                className={`${
+                  selectedFilter === "Bug" ? "bg-blue-600" : "bg-blue-200"
+                } flex  items-center p-1 rounded-lg cursor-pointer`}
+              >
+                <p id="bug" onClick={handleClickFilter}>
+                  Bug
+                </p>
+              </div>
+              <div
+                className={`${
+                  selectedFilter === "Feature" ? "bg-blue-600" : "bg-blue-200"
+                } flex  items-center p-1 rounded-lg cursor-pointer`}
+              >
+                <p id="feature" onClick={handleClickFilter}>
+                  Feature
+                </p>
+              </div>
             </div>
             {/* left block with roadmap etc */}
             <div className="bg-white rounded-lg py-2 px-4">
               <div className="flex justify-between pb-5 items-center">
                 <p className="text-black font-bold">Roadmap</p>
-                <p className="underline text-blue-600 text-sm">View</p>
+                <p className="underline text-blue-600 text-sm font-semibold">
+                  View
+                </p>
               </div>
 
-              <div className="flex flex-col list-disc list-inside">
-                <div className="flex justify-between">
-                  <p>
-                    {" "}
-                    <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
-                    Planned
-                  </p>
+              {/* Planned */}
+              <div className="flex flex-col list-disc list-inside font-semibold text-gray-500">
+                <div className="flex justify-between item-center">
+                  <div className="flex items-center gap-4">
+                    <div className="w-3 h-3 bg-[#f49e85] rounded-full"></div>
+                    <p>Planned</p>
+                  </div>
                   <p>{planned}</p>
                 </div>
 
-                <div className="flex justify-between">
-                  <p>
-                    {" "}
-                    <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
-                    In-Progress
-                  </p>
+                {/* In-progress */}
+                <div className="flex justify-between item-center">
+                  <div className="flex items-center gap-4">
+                    <div className="w-3 h-3 bg-[#ae1feb] rounded-full"></div>
+                    <p>In-progress</p>
+                  </div>
                   <p>{inProgressCounter}</p>
                 </div>
 
-                <div className="flex justify-between">
-                  <p>
-                    {" "}
-                    <span className="text-yellow-400 pr-1">&#8226;</span> Live
-                  </p>
+                {/* Live */}
+                <div className="flex justify-between item-center">
+                  <div className="flex items-center gap-4">
+                    <div className="w-3 h-3 bg-[#62bdf9] rounded-full"></div>
+                    <p>Live</p>
+                  </div>
                   <p>{liveCounter}</p>
                 </div>
-                <div className="flex justify-between">
-                  <p>
-                    {" "}
-                    <span className="text-yellow-400 pr-1">&#8226;</span>{" "}
-                    Suggestion
-                  </p>
+
+                {/* Suggestion */}
+                <div className="flex justify-between item-center">
+                  <div className="flex items-center gap-4">
+                    <div className="w-3 h-3 bg-[#36ff61] rounded-full"></div>
+                    <p>Suggestion</p>
+                  </div>
                   <p>{suggestion}</p>
                 </div>
               </div>
