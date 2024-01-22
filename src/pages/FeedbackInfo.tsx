@@ -87,7 +87,7 @@ function FeedbackInfo() {
       const { error } = await supabase
         .from("Product-feedback-app")
         .update({ productRequests: newArr })
-        .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+        .eq("id", "7d2cce98-8c81-4da7-825b-c9affbff1a17");
     }
     setIsUpvoteClicked(true);
   };
@@ -147,7 +147,7 @@ function FeedbackInfo() {
   //de retinut
   const handleClick = () => {
     updateProductRequestTitle({
-      rowId: "90813cf7-fdee-4f10-aef5-ce2c1950c9c3",
+      rowId: "7d2cce98-8c81-4da7-825b-c9affbff1a17",
       productRequestId: feedbackData.id,
       newTitle: title,
       newDescription: description,
@@ -207,7 +207,7 @@ function FeedbackInfo() {
       const { data, updateError } = await supabase
         .from(TABLE_NAME)
         .update({ productRequests: updatedProductRequests })
-        .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+        .eq("id", "7d2cce98-8c81-4da7-825b-c9affbff1a17");
 
       console.log("comment added");
 

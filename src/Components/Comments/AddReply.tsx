@@ -71,7 +71,7 @@ function AddReply({ setIsReplyInputOpen, comment }: any) {
       const { error } = await supabase
         .from(TABLE_NAME)
         .update({ productRequests: updatedArray })
-        .eq("id", "90813cf7-fdee-4f10-aef5-ce2c1950c9c3");
+        .eq("id", "7d2cce98-8c81-4da7-825b-c9affbff1a17");
     } catch {}
   };
 
