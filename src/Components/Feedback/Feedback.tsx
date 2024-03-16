@@ -1,10 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import arrowUp from "../../assets/shared/icon-arrow-up.svg";
 import commentsIcon from "../../assets/shared/icon-comments.svg";
 import { FeedbackProps } from "./Feedbacks";
 import { Link } from "react-router-dom";
-import { UsersReply } from "../../Types/ReplyTypes";
-import UsersComment from "../../Types/CommentTypes";
+
 import FeedbackUpvotes from "./FeedbackUpvotes";
 import supabase from "../../configSupa/supabaseConfiguration";
 
@@ -15,26 +14,11 @@ export type Props = {
   rowUser: string;
 };
 
-type Reply = {
-  id: number;
-  content: string;
-  user: UsersComment;
-  replies: UsersReply[];
-};
-
 function Feedback({ item, prodReqArr, rowUser }: Props) {
   const [upVotes, setUpVotes] = useState<number>(item.upvotes);
   const [isUpvoteClicked, setIsUpvoteClicked] = useState(false);
 
   let commentLength = item.comments ?? [];
-
-  // const replies = commentLength.map((item: Reply) => {
-  //   return item.replies?.length ?? 0;
-  // });
-
-  // const numberOfReplies = replies.reduce((acc: number, curr: number) => {
-  //   return acc + curr;
-  // }, 0);
 
   const incrementUpvotes = async (e: any) => {
     e.preventDefault();
@@ -66,6 +50,7 @@ function Feedback({ item, prodReqArr, rowUser }: Props) {
         .update({ productRequests: newArr })
         .eq("id", "7d2cce98-8c81-4da7-825b-c9affbff1a17");
 
+      console.error(error);
       setIsUpvoteClicked(true);
     }
   };

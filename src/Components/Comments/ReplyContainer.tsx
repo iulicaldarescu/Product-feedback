@@ -77,6 +77,7 @@ function ReplyContainer({ replyItem, comment }: ReplyItem) {
         .from(TABLE_NAME)
         .update({ productRequests: updatedArray })
         .eq("id", "7d2cce98-8c81-4da7-825b-c9affbff1a17");
+      console.error(error);
     } catch {}
   };
 
