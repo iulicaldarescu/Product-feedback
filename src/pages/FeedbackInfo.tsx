@@ -59,6 +59,7 @@ function FeedbackInfo() {
   });
 
   const incrementUpvotes = async (e: any) => {
+    console.log(e);
     const rowUser: string = currentData[0].currentUser.username;
     if (feedbackData.usersUpvoted.includes(rowUser) || isUpvoteClicked) {
       return;
@@ -84,11 +85,12 @@ function FeedbackInfo() {
           : itemObj;
       });
 
-      const { error } = await supabase
+      const {} = await supabase
         .from("Product-feedback-app")
         .update({ productRequests: newArr })
         .eq("id", "7d2cce98-8c81-4da7-825b-c9affbff1a17");
     }
+
     setIsUpvoteClicked(true);
   };
 

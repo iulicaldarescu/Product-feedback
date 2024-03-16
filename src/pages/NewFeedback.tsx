@@ -44,7 +44,7 @@ function NewFeedback() {
     ];
 
     // update array from supabase overwriting the prototype array in productRequests row object property
-    const { error } = await supabase
+    const {} = await supabase
       .from(TABLE_NAME)
       .update({ productRequests: newArr })
       .eq("id", dataObjectSupabaseRow.id);
